@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "679322265446",
+    "project_id": "food-intolerance-app-fyp",
+    "storage_bucket": "food-intolerance-app-fyp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679322265446:android:1fb6136b885674be140aa7",
+        "android_client_info": {
+          "package_name": "com.example.foodintoleranceappfyp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679322265446-h5itaddd59aequk26l6kbguksku1uli5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCETxbngcgwJRHzGZo69xrWe3NXJng9KNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679322265446-h5itaddd59aequk26l6kbguksku1uli5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

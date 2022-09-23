@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FoodFragment">
+
+    <TextView
+        android:id="@+id/tv_no_food"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="20dp"
+        android:gravity="center">
+    </TextView>
+
+    <ListView
+        android:id="@+id/lv_food_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/design_default_color_primary"/>
+
+    <ImageView
+        android:id="@+id/imgView_add_first_food"
+        android:background="@drawable/background_black_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_add_white"
+        android:layout_marginTop="600dp"
+        android:layout_marginLeft="300dp"/>
+
+
+</FrameLayout>

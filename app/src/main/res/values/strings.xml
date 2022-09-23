@@ -1,0 +1,113 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Food Intolerance App</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="img_description">Login Image</string>
+    <string name="welcome">Nice to see you again!</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="signUp">Do not have an account? Sign Up now</string>
+    <string name="welcomeNewUser">Join us by creating an account</string>
+    <string name="userType">Type of user?</string>
+    <string name="selectUserType">Continue</string>
+    <string name="PatientExplanation">"Gluten/Lactose/Fructose Intolerant Patient can:
+
+1.Order food for self pickup
+2.Online consultation with doctor
+3.Receive helpful advice from AI doctor and more!"</string>
+
+    <string name="DoctorExplanation">"Doctor can:
+
+1.Online consultation with patient"</string>
+
+    <string name="restaurantOwnerExplanation">"Restaurant owner can:
+
+1.Add new food in the menu of your restaurant"</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="register">Register</string>
+    <string name="gluten">Gluten</string>
+    <string name="lactose">Lactose</string>
+    <string name="intolerant">Intolerance(s)</string>
+    <string name="fructose">Fructose</string>
+    <string name="restaurantAddress_hint">Restaurant Address</string>
+    <string name="welcomeNewRestaurantOwner">Create an account to begin your career</string>
+    <string name="restaurantName_hint">Restaurant Name</string>
+    <string name="welcomeNewDoctor">Register an account to help patients</string>
+    <string name="swipeLeftToRegister">Swipe Left To Register</string>
+    <string name="swipeRightToLogin">Swipe Right to Login</string>
+    <string name="resetPassword">Reset Password</string>
+    <string name="sendEmail">Send Email</string>
+    <string name="resetPasswordExplanation">An email will be sent to your email address. Click the link in the email to reset password.</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="username">Username</string>
+    <string name="userType2">User Type</string>
+    <string name="profileEmail">Email</string>
+    <string name="manage">Manage</string>
+    <string name="incomingMeetingInvitation">Incoming Meeting Invitation</string>
+    <string name="sendingMeetingInvitation">Sending Meeting Invitation</string>
+    <string name="allPatient">All Patient</string>
+
+    <string name="dropbox_app_key">5rq6x831nrni2eg</string>
+    <string name="makeAppointment">Make Appointment for Video Conferencing</string>
+    <string name="confirmAppointment">Make Appointment</string>
+
+    <string name="title_activity_nearby_health_facility_fragment">Map</string>
+    <string name="restaurantName">Restaurant Name</string>
+    <string name="restaurantState">Restaurant State</string>
+    <string name="addNewRestaurant">Add New Restaurant</string>
+    <string name="addMenuTips">You can add food for your restaurant after registering your account</string>
+    <string name="addMenuTipsNewRestaurant">You can add food for your restaurant later</string>
+    <string name="my_restaurant">My Restaurant</string>
+    <string name="menu">Menu</string>
+    <string name="location">Location</string>
+    <string name="upload">Upload</string>
+    <string name="select">Select</string>
+    <string name="restaurantLogo">Restaurant Logo</string>
+    <string name="foodName">Food Name</string>
+    <string name="foodDescription">Food Description</string>
+    <string name="foodPrice">Food Price in RM</string>
+    <string name="add_food">Add Food</string>
+    <string name="addNewFood">Add New Food</string>
+    <string name="foodNutrient">Which of these is in the food? Select more than 1 if applicable</string>
+    <string name="approved_food_tab">Approved Food</string>
+    <string name="pending_food_tab">Pending Food</string>
+    <string name="hide">Hide</string>
+    <string name="addRestaurantTips">You can add your restaurant after registering an account</string>
+    <string name="allMenu">All Menu</string>
+    <string name="all_patient">Patients</string>
+    <string name="all_doctor">Doctors</string>
+    <string name="all_restaurant_owner">Restaurant Owners</string>
+
+    <string-array name="userType_array">
+        <item>Please select a user type</item>
+        <item>Gluten/Lactose/Fructose Intolerant Patient</item>
+        <item>Doctor</item>
+        <item>Restaurant Owner</item>
+    </string-array>
+
+    <string-array name="state_array">
+        <item>Please select the state that you live in</item>
+        <item>Selangor</item>
+        <item>Penang</item>
+        <item>Johor</item>
+    </string-array>
+
+    <string-array name="restaurantState_array">
+        <item>Please select the state that your restaurant is in</item>
+        <item>Selangor</item>
+        <item>Penang</item>
+        <item>Johor</item>
+    </string-array>
+    <string-array name="hospital_array">
+        <item>Please select the hospital that you work in</item>
+        <item>Gleneagles Hospital</item>
+        <item>Bukit Mertajam Hospital</item>
+        <item>KPJ Penang Specialist Hospital</item>
+    </string-array>
+
+</resources>

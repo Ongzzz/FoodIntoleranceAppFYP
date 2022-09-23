@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_admin_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="My Profile" />
+
+        <item
+            android:id="@+id/nav_all_user"
+            android:icon="@drawable/ic_doctor_list"
+            android:title="All User" />
+
+        <item
+            android:id="@+id/nav_all_menu"
+            android:icon="@drawable/ic_menu"
+            android:title="@string/allMenu"/>
+
+        <item
+            android:id="@+id/nav_consultationRecord"
+            android:icon="@drawable/ic_record"
+            android:title="All Consultation Records" />
+
+        <item
+            android:id="@+id/nav_approveDoctor"
+            android:icon="@drawable/ic_add_person"
+            android:title="Approve Doctor" />
+
+        <item
+            android:id="@+id/nav_approveFood"
+            android:icon="@drawable/ic_restaurant_name"
+            android:title="Approve Food" />
+
+        <item
+            android:id="@+id/nav_addRecipe"
+            android:icon="@drawable/ic_add_recipe"
+            android:title="Add Recipe" />
+
+
+    </group>
+
+    <item android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+</menu>

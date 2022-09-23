@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBox
+        android:id="@+id/cb_changeIntolerance_gluten"
+        style="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/gluten"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
+
+    <CheckBox
+        android:id="@+id/cb_changeIntolerance_fructose"
+        style="?android:attr/textAppearanceMedium"
+        app:layout_constraintStart_toStartOf="@id/cb_changeIntolerance_gluten"
+        app:layout_constraintTop_toBottomOf="@id/cb_changeIntolerance_gluten"
+        app:layout_constraintEnd_toEndOf="@id/cb_changeIntolerance_gluten"
+        android:text="@string/fructose"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"/>
+
+    <CheckBox
+        android:id="@+id/cb_changeIntolerance_lactose"
+        style="?android:attr/textAppearanceMedium"
+        app:layout_constraintStart_toStartOf="@id/cb_changeIntolerance_fructose"
+        app:layout_constraintTop_toBottomOf="@id/cb_changeIntolerance_fructose"
+        app:layout_constraintEnd_toEndOf="@id/cb_changeIntolerance_fructose"
+        android:text="@string/lactose"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

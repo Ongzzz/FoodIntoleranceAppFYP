@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_patient_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="My Profile" />
+
+        <item
+            android:id="@+id/nav_doctorList"
+            android:icon="@drawable/ic_doctor_list"
+            android:title="Our Doctor" />
+
+<!--        <item-->
+<!--            android:id="@+id/nav_nearbyFacility"-->
+<!--            android:icon="@drawable/ic_nearby_facility"-->
+<!--            android:title="Nearby Health Facility" />-->
+
+        <item
+            android:id="@+id/nav_viewRecipe"
+            android:icon="@drawable/ic_view_recipe"
+            android:title="View Recipe" />
+
+        <item
+            android:id="@+id/nav_pickup"
+            android:icon="@drawable/ic_pickup"
+            android:title="Order For Pickup" />
+
+        <item
+            android:id="@+id/nav_orderHistory"
+            android:icon="@drawable/ic_order_history"
+            android:title="Order History" />
+
+        <item
+            android:id="@+id/nav_appointment"
+            android:icon="@drawable/ic_calendar"
+            android:title="Make Appointment" />
+
+        <item
+            android:id="@+id/nav_consultationRecord"
+            android:icon="@drawable/ic_record"
+            android:title="My Consultation Records" />
+
+        <item
+            android:id="@+id/nav_AIDoctor"
+            android:icon="@drawable/ic_chatbot"
+            android:title="AI Doctor" />
+
+    </group>
+
+    <item android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+</menu>

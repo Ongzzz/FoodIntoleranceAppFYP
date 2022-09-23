@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadeScrollbars="false">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_restaurantLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/restaurantLogo"
+        android:textColor="@color/teal_700"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgView_restaurant_logo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/tv_restaurantName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantLogo"
+        app:layout_constraintVertical_bias="0.254"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/btn_select_restaurant_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/unfocused"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/select"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_restaurantName"
+        app:layout_constraintEnd_toStartOf="@+id/btn_upload"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView_restaurant_logo"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/unfocused"
+        android:text="@string/upload"
+        app:layout_constraintTop_toBottomOf="@+id/imgView_restaurant_logo"
+        app:layout_constraintStart_toEndOf="@+id/btn_select_restaurant_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_restaurantName"/>
+
+    <TextView
+        android:id="@+id/tv_restaurantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/restaurantName"
+        android:textColor="@color/teal_700"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_upload" />
+
+    <Spinner
+        android:id="@+id/spinner_myRestaurant"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/round_et"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="Restaurant Name"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantName" />
+
+    <ImageView
+        android:id="@+id/imgView_arrow"
+        android:layout_width="37dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_myRestaurant"
+        app:layout_constraintHorizontal_bias="1.4"
+        app:layout_constraintStart_toStartOf="@+id/spinner_myRestaurant"
+        app:layout_constraintTop_toTopOf="@+id/spinner_myRestaurant"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_myRestaurant"
+        app:srcCompat="@drawable/ic_arrow" />
+
+    <ImageView
+        android:id="@+id/imgView_restaurantName"
+        android:layout_width="37dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_myRestaurant"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_myRestaurant"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinner_myRestaurant"
+        app:srcCompat="@drawable/ic_restaurant_name" />
+
+    <TextView
+        android:id="@+id/tv_restaurantAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/restaurantAddress_hint"
+        android:textColor="@color/teal_700"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_myRestaurant" />
+
+    <TextView
+        android:id="@+id/tv_restaurantAddressField"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/round_et"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="@string/restaurantAddress_hint"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantAddress" />
+
+    <ImageView
+        android:id="@+id/imgView_restaurantAddress"
+        android:layout_width="37dp"
+        android:layout_height="39dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_restaurantAddressField"
+        app:layout_constraintEnd_toStartOf="@+id/tv_restaurantAddressField"
+        app:layout_constraintHorizontal_bias="0.87"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_restaurantAddressField"
+        app:srcCompat="@drawable/ic_location" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgView_changeRestaurantAddress"-->
+<!--        android:layout_width="37dp"-->
+<!--        android:layout_height="39dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/tv_restaurantAddressField"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.209"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/tv_restaurantAddressField"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/tv_restaurantAddressField"-->
+<!--        app:layout_constraintVertical_bias="0.509"-->
+<!--        app:srcCompat="@drawable/ic_change" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_restaurantState"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:fontFamily="sans-serif-condensed"-->
+<!--        android:text="@string/restaurantState"-->
+<!--        android:textColor="@color/teal_700"-->
+<!--        android:textSize="25dp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantAddressField" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_restaurantStateField"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_marginTop="28dp"-->
+<!--        android:background="@drawable/round_et"-->
+<!--        android:ems="10"-->
+<!--        android:fontFamily="sans-serif-condensed"-->
+<!--        android:gravity="center"-->
+<!--        android:paddingEnd="10dp"-->
+<!--        android:paddingStart="10dp"-->
+<!--        android:text="Restaurant State"-->
+<!--        android:inputType="none"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.502"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantState" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgView_restaurantState"-->
+<!--        android:layout_width="37dp"-->
+<!--        android:layout_height="39dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/tv_restaurantStateField"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/tv_restaurantStateField"-->
+<!--        app:layout_constraintHorizontal_bias="0.87"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/tv_restaurantStateField"-->
+<!--        app:srcCompat="@drawable/ic_location" />-->
+
+    <!--    <Spinner-->
+    <!--        android:id="@+id/spinner_myRestaurant"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/tv_restaurantName"-->
+    <!--        tools:layout_editor_absoluteX="361dp"-->
+    <!--        tools:layout_editor_absoluteY="32dp" />-->
+
+    <Button
+        android:id="@+id/btn_addNewRestaurant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addNewRestaurant"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/unfocused"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantAddressField" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
