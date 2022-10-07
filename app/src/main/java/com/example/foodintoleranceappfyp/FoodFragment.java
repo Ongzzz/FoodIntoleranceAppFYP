@@ -52,7 +52,7 @@ public class FoodFragment extends Fragment {
 
         if(bundle != null)
         {
-            Restaurant restaurant = (Restaurant) bundle.getSerializable("restaurant");
+            Restaurant restaurant = (Restaurant) bundle.getSerializable("Restaurant");
 
             TextView tv_no_food = view.findViewById(R.id.tv_no_food);
             ListView lv_food_list = view.findViewById(R.id.lv_food_list);
@@ -141,13 +141,21 @@ public class FoodFragment extends Fragment {
                                         }
                                     }
 
+
+
                                     if(foodList.isEmpty())
                                     {
-                                        imgView_add_first_food.setVisibility(View.VISIBLE);
+                                        if(!userType.equals("Restaurant Owner"))
+                                        {
+                                            imgView_add_first_food.setVisibility(View.GONE);
+                                        }
+                                        else
+                                        {
+                                            imgView_add_first_food.setVisibility(View.VISIBLE);
+                                        }
                                         tv_no_food.setVisibility(View.VISIBLE);
                                         tv_no_food.setText("No Food...");
                                         lv_food_list.setVisibility(View.GONE);
-
                                     }
                                     else
                                     {

@@ -78,20 +78,24 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
 
         if(fragmentName.equals("Approve Doctor"))
         {
-            String pendingDoctorInfo = "Doctor Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getName() +
-                    "<br></b>Doctor Email: &nbsp; &nbsp; &nbsp; <b>" + arrayList.get(position).getEmail() +
-                    "<br></b>Hospital: &nbsp; &nbsp; <b>" + arrayList.get(position).getHospital();
+            String doctorInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getName())
+                    + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getEmail())
+                    + System.getProperty("line.separator") + String.format("%-20s : %s", "Hospital", arrayList.get(position).getHospital());
 
-            tv_doctorInfo.setText(Html.fromHtml(pendingDoctorInfo));
+            tv_doctorInfo.setText(doctorInfo);
         }
 
         if(fragmentName.equals("Doctor List"))
         {
-            String doctorInfo = "Doctor Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getName() +
-                    "<br></b>Doctor Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getEmail() +
-                    "<br></b>Hospital: &nbsp; &nbsp; <b>" + arrayList.get(position).getHospital();
+//            String doctorInfo = "Doctor Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getName() +
+//                    "<br></b>Doctor Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getEmail() +
+//                    "<br></b>Hospital: &nbsp; &nbsp; <b>" + arrayList.get(position).getHospital();
 
-            tv_doctorInfo.setText(Html.fromHtml(doctorInfo));
+            String doctorInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getName())
+                    + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getEmail())
+                    + System.getProperty("line.separator") + String.format("%-20s : %s", "Hospital", arrayList.get(position).getHospital());
+
+            tv_doctorInfo.setText(doctorInfo);
             imgView_managePendingDoctor.setVisibility(View.GONE);
         }
 

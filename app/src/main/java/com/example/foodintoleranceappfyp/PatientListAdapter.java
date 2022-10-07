@@ -98,13 +98,18 @@ public class PatientListAdapter extends BaseAdapter implements android.widget.Li
 
         String intolerance = TextUtils.join(", ", arrayList.get(position).getIntolerance());
 
-        String patientInfo = "Patient Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getName() +
-                "<br></b>Patient Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getEmail() +
-                "<br></b>Gender: &nbsp; &nbsp; <b>" + arrayList.get(position).getGender() +
-                "<br></b>State: &nbsp; &nbsp; <b>" + arrayList.get(position).getState() +
-                "<br></b>Intolerance: &nbsp; &nbsp; <b>" + intolerance;
+        String patientInfo = String.format("%-13s : %s", "Patient Name", arrayList.get(position).getName())
+                + System.getProperty("line.separator")
+                + String.format("%-15s : %s","Patient Email", arrayList.get(position).getEmail())
+                + System.getProperty("line.separator")
+                + String.format("%-18s : %s","Gender", arrayList.get(position).getGender())
+                + System.getProperty("line.separator")
+                + String.format("%-21s : %s", "State", arrayList.get(position).getState())
+                + System.getProperty("line.separator")
+                + String.format("%-16s : %s","Intolerance", intolerance);
 
-        tv_patientInfo.setText(Html.fromHtml(patientInfo));
+        tv_patientInfo.setText(patientInfo);
+
 
         return convertView;
     }

@@ -1,7 +1,9 @@
 package com.example.foodintoleranceappfyp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -146,74 +148,89 @@ public class AddRestaurantFragment extends Fragment {
                                  }
                                  if(!found)
                                  {
-                                     ProgressDialog progressDialog
-                                             = new ProgressDialog(getContext());
-                                     progressDialog.setTitle("Setting up your new restaurant...");
-                                     progressDialog.show();
+                                     AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                                             .setTitle("Warning")
+                                             .setMessage("Do you sure the address is correct? The patients can't pickup their food if the address is invalid."+System.getProperty("line.separator")+System.getProperty("line.separator")+restaurantAddress)
+                                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(DialogInterface dialog, int which) {
+                                                     ProgressDialog progressDialog
+                                                             = new ProgressDialog(getContext());
+                                                     progressDialog.setTitle("Setting up your new restaurant...");
+                                                     progressDialog.show();
 
-                                     String filePath = "images/"+restaurantName+"/Logo";
-                                     storageReference = fStorage.getReference(filePath);
+                                                     String filePath = "images/"+restaurantName+"/Logo";
+                                                     storageReference = fStorage.getReference(filePath);
 
-                                     storageReference.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                         @Override
-                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                     storageReference.putFile(path).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                         @Override
+                                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                             if(progressDialog.isShowing())
-                                             {
-                                                 progressDialog.dismiss();
-                                             }
-                                         }
-                                     }).addOnFailureListener(new OnFailureListener() {
-                                         @Override
-                                         public void onFailure(@NonNull Exception e) {
+                                                             if(progressDialog.isShowing())
+                                                             {
+                                                                 progressDialog.dismiss();
+                                                             }
+                                                         }
+                                                     }).addOnFailureListener(new OnFailureListener() {
+                                                         @Override
+                                                         public void onFailure(@NonNull Exception e) {
 
-                                             if(progressDialog.isShowing())
-                                             {
-                                                 progressDialog.dismiss();
-                                             }
-                                             Toast.makeText(getContext(),"Some error occurs... Please try again.", Toast.LENGTH_SHORT).show();
-                                         }
-                                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                         @Override
-                                         public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                                             if(progressDialog.isShowing())
+                                                             {
+                                                                 progressDialog.dismiss();
+                                                             }
+                                                             Toast.makeText(getContext(),"Some error occurs... Please try again.", Toast.LENGTH_SHORT).show();
+                                                         }
+                                                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                                         @Override
+                                                         public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
 
-                                             double progress = (100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                                             progressDialog.setMessage((int)progress + "%");
-                                         }
-                                     });
+                                                             double progress = (100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                                                             progressDialog.setMessage((int)progress + "%");
+                                                         }
+                                                     });
 
-                                     DocumentReference restaurantOwnerReference = fStore.collection("restaurantOwners").document(userId);
-                                     restaurantOwnerReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                         @Override
-                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if(task.isSuccessful())
-                                            {
-                                                DocumentSnapshot ds = task.getResult();
-                                                restaurantList = (ArrayList<String>) ds.get("Restaurant Name");
-                                                restaurantList.add(restaurantName);
+                                                     DocumentReference restaurantOwnerReference = fStore.collection("restaurantOwners").document(userId);
+                                                     restaurantOwnerReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                         @Override
+                                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                             if(task.isSuccessful())
+                                                             {
+                                                                 DocumentSnapshot ds = task.getResult();
+                                                                 restaurantList = (ArrayList<String>) ds.get("Restaurant Name");
+                                                                 restaurantList.add(restaurantName);
 
-                                                Map<String, Object> updatedRestaurantList = new HashMap<>();
-                                                updatedRestaurantList.put("Restaurant Name", restaurantList);
-                                                restaurantOwnerReference.update(updatedRestaurantList);
+                                                                 Map<String, Object> updatedRestaurantList = new HashMap<>();
+                                                                 updatedRestaurantList.put("Restaurant Name", restaurantList);
+                                                                 restaurantOwnerReference.update(updatedRestaurantList);
 
-                                                DocumentReference restaurantReference = fStore.collection("restaurants").document(userId+restaurantName);
-                                                Map<String, Object> newRestaurant = new HashMap<>();
-                                                newRestaurant.put("Restaurant Owner Email", userId);
-                                                newRestaurant.put("Restaurant Name",restaurantName);
-                                                newRestaurant.put("Restaurant Address",restaurantAddress);
-                                                newRestaurant.put("Restaurant State",restaurantState);
-                                                newRestaurant.put("Menu", restaurantMenu);
-                                                newRestaurant.put("Restaurant Logo", filePath);
-                                                restaurantReference.set(newRestaurant);
+                                                                 DocumentReference restaurantReference = fStore.collection("restaurants").document(userId+restaurantName);
+                                                                 Map<String, Object> newRestaurant = new HashMap<>();
+                                                                 newRestaurant.put("Restaurant Owner Email", userId);
+                                                                 newRestaurant.put("Restaurant Name",restaurantName);
+                                                                 newRestaurant.put("Restaurant Address",restaurantAddress);
+                                                                 newRestaurant.put("Restaurant State",restaurantState);
+                                                                 newRestaurant.put("Menu", restaurantMenu);
+                                                                 newRestaurant.put("Restaurant Logo", filePath);
+                                                                 restaurantReference.set(newRestaurant);
 
-                                                Toast.makeText(getContext(),"New restaurant is added successfully", Toast.LENGTH_SHORT).show();
+                                                                 Toast.makeText(getContext(),"New restaurant is added successfully", Toast.LENGTH_SHORT).show();
 
-                                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                                        new MyRestaurantFragment()).commit();
+                                                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                                         new MyRestaurantFragment()).commit();
 
-                                            }
-                                         }
-                                     });
+                                                             }
+                                                         }
+                                                     });
+                                                 }
+                                             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(DialogInterface dialog, int which) {
+
+                                                 }
+                                             }).show();
+
+
 
 
                                  }

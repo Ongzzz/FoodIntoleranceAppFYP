@@ -31,7 +31,7 @@ public class MyRestaurantFragment extends Fragment {
 
         fragments.add(new MyRestaurantTab());
         fragments.add(new MenuTab());
-        fragments.add(new RestaurantLocationTab());
+        fragments.add(new RestaurantCompletedOrderTab());
 
         ViewPagerFragmentAdapter viewPagerFragmentAdapter = new ViewPagerFragmentAdapter(getActivity().getSupportFragmentManager(),
                 getLifecycle(), fragments);

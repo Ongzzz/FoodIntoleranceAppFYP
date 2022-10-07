@@ -53,11 +53,14 @@ public class RestaurantOwnerListAdapter extends BaseAdapter implements android.w
 
         String restaurantList = TextUtils.join(", ", arrayList.get(position).getRestaurantName());
 
-        String restaurantOwnerInfo = "Restaurant Owner Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getName() +
-                "<br></b>Restaurant Owner Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getEmail() +
-                "<br></b>Owned Restaurant(s): &nbsp; &nbsp; <b>" + restaurantList;
+        String restaurantOwnerInfo =
+                String.format("%-14s : %s","Restaurant Owner Name", arrayList.get(position).getName()) +
+                System.getProperty("line.separator") +
+                String.format("%-23s : %s","Restaurant Owner Email",arrayList.get(position).getEmail()) +
+                System.getProperty("line.separator") +
+                String.format("%-25s : %s","Owned Restaurant(s)", restaurantList);
 
-        tv_restaurantOwnerInfo.setText(Html.fromHtml(restaurantOwnerInfo));
+        tv_restaurantOwnerInfo.setText(restaurantOwnerInfo);
 
         return convertView;
     }

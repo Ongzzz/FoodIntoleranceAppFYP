@@ -14,11 +14,6 @@
             android:icon="@drawable/ic_doctor_list"
             android:title="Our Doctor" />
 
-<!--        <item-->
-<!--            android:id="@+id/nav_nearbyFacility"-->
-<!--            android:icon="@drawable/ic_nearby_facility"-->
-<!--            android:title="Nearby Health Facility" />-->
-
         <item
             android:id="@+id/nav_viewRecipe"
             android:icon="@drawable/ic_view_recipe"

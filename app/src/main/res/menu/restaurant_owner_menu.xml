@@ -15,6 +15,11 @@
             android:title="My Restaurant" />
 
         <item
+            android:id="@+id/nav_pendingOrder"
+            android:icon="@drawable/ic_order_history"
+            android:title="Pending Order" />
+
+        <item
             android:id="@+id/nav_doctorList"
             android:icon="@drawable/ic_doctor_list"
             android:title="Our Doctor" />

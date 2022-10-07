@@ -36,16 +36,16 @@ public class RestaurantListAdapter extends BaseAdapter implements android.widget
 
     private ArrayList<Restaurant> arrayList = new ArrayList<>();
     private Context context;
-    private String userType;
+    private String operation;
 
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     FirebaseStorage fStorage = FirebaseStorage.getInstance();
     StorageReference storageReference;
 
-    public RestaurantListAdapter(ArrayList<Restaurant> arrayList, Context context, String userType) {
+    public RestaurantListAdapter(ArrayList<Restaurant> arrayList, Context context, String operation) {
         this.arrayList = arrayList;
         this.context = context;
-        this.userType = userType;
+        this.operation = operation;
     }
 
     @Override
@@ -112,16 +112,16 @@ public class RestaurantListAdapter extends BaseAdapter implements android.widget
                         arrayList.get(position).getRestaurantState(), arrayList.get(position).getRestaurantOwnerEmail(),
                         arrayList.get(position).getMenu(), arrayList.get(position).getLogoPath());
 
-                bundle.putSerializable("restaurant", restaurant);
+                bundle.putSerializable("Restaurant", restaurant);
 
                 MainActivity activity = (MainActivity) context;
-                if(userType.equals("Admin"))
+                if(operation.equals("Admin"))
                 {
                     FoodFragment fragment = new FoodFragment();
                     fragment.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 }
-                if(userType.equals("Patient"))
+                if(operation.equals("Patient"))
                 {
                     FirebaseAuth fAuth = FirebaseAuth.getInstance();
                     String userId = fAuth.getCurrentUser().getEmail();
@@ -164,9 +164,15 @@ public class RestaurantListAdapter extends BaseAdapter implements android.widget
                     });
 
                 }
-                if(userType.equals("Restaurant Owner"))
+                if(operation.equals("Restaurant Owner"))
                 {
                     MenuFragment fragment = new MenuFragment();
+                    fragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                }
+                if(operation.equals("Completed Order"))
+                {
+                    CompletedOrderFragment fragment = new CompletedOrderFragment();
                     fragment.setArguments(bundle);
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 }

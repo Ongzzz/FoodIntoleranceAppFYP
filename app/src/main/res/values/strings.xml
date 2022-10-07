@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Food Intolerance App</string>
 
@@ -82,6 +83,18 @@
     <string name="all_patient">Patients</string>
     <string name="all_doctor">Doctors</string>
     <string name="all_restaurant_owner">Restaurant Owners</string>
+    <string name="payment">Proceed to Payment</string>
+    <string name="foodImage">Food Image</string>
+    <string name="foodQuantity">Quantity</string>
+    <string name="foodPriceTitle">Food Price</string>
+    <string name="totalPrice">Total Price</string>
+    <string name="tab">\u0009</string>
+    <string name="orderHistory">Order History</string>
+    <string name="completedOrder">Completed Order</string>
+    <string name="checkout">Checkout</string>
+    <string name="getDirection">Get Direction</string>
+    <string name="pending_order">Pending Order</string>
+    <string name="deleteRestaurant">Delete Restaurant</string>
 
     <string-array name="userType_array">
         <item>Please select a user type</item>

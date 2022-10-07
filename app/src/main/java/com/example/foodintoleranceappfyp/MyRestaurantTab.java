@@ -1,7 +1,9 @@
 package com.example.foodintoleranceappfyp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -67,6 +71,8 @@ public class MyRestaurantTab extends Fragment {
     String restaurantAddress, restaurantState, restaurantName, logoPath;
     ArrayList<String> restaurantMenu = new ArrayList<>();
 
+    ArrayAdapter<String> adapter;
+
     Uri path;
     ImageView imgView_restaurant_logo;
 
@@ -82,6 +88,7 @@ public class MyRestaurantTab extends Fragment {
 //        ImageView imgView_changeRestaurantAddress = view.findViewById(R.id.imgView_changeRestaurantAddress);
         Spinner spinner_myRestaurant = view.findViewById(R.id.spinner_myRestaurant);
         Button btn_addNewRestaurant = view.findViewById(R.id.btn_addNewRestaurant);
+        Button btn_deleteRestaurant = view.findViewById(R.id.btn_deleteRestaurant);
         Button btn_select_restaurant_logo = view.findViewById(R.id.btn_select_restaurant_logo);
         Button btn_upload = view.findViewById(R.id.btn_upload);
         imgView_restaurant_logo = view.findViewById(R.id.imgView_restaurant_logo);
@@ -125,7 +132,7 @@ public class MyRestaurantTab extends Fragment {
                                         }
                                     }
 
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                    adapter = new ArrayAdapter<String>(
                                             getContext(), android.R.layout.simple_spinner_item, myRestaurants);
 
                                     spinner_myRestaurant.setAdapter(adapter);
@@ -215,6 +222,84 @@ public class MyRestaurantTab extends Fragment {
             }
         });
 
+        btn_deleteRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                        .setTitle("Warning")
+                        .setMessage("Do you want to delete this restaurant? Deleted restaurant can't be recovered.")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                DocumentReference restaurantReference = fStore.collection("restaurants").document(userId+spinner_myRestaurant.getSelectedItem().toString());
+                                restaurantReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful())
+                                        {
+                                            DocumentReference restaurantOwnerReference = fStore.collection("restaurantOwners").document(userId);
+                                            restaurantOwnerReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if(task.isSuccessful())
+                                                    {
+                                                        DocumentSnapshot documentSnapshot = task.getResult();
+                                                        ArrayList<String> ownedRestaurantList = (ArrayList)documentSnapshot.get("Restaurant Name");
+                                                        ownedRestaurantList.remove(spinner_myRestaurant.getSelectedItem().toString());
+                                                        Map<String,Object> updatedRestaurantList = new HashMap<>();
+                                                        updatedRestaurantList.put("Restaurant Name",ownedRestaurantList);
+                                                        restaurantOwnerReference.update(updatedRestaurantList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful())
+                                                                {
+                                                                    StorageReference storageReference = fStorage.getReference("images/"+spinner_myRestaurant.getSelectedItem().toString());
+                                                                    storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                                                                        @Override
+                                                                        public void onSuccess(ListResult listResult) {
+                                                                            for (StorageReference singleFileReference : listResult.getItems())
+                                                                            {
+                                                                                singleFileReference.delete();
+                                                                            }
+                                                                        }
+                                                                    });
+
+                                                                    getActivity().getSupportFragmentManager().beginTransaction().
+                                                                            replace(R.id.fragment_container, new MyRestaurantFragment()).commit();
+
+//                                                                    storageReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                                        @Override
+//                                                                        public void onComplete(@NonNull Task<Void> task) {
+//                                                                            if(task.isSuccessful())
+//                                                                            {
+//                                                                                getActivity().getSupportFragmentManager().beginTransaction().
+//                                                                                        replace(R.id.fragment_container, new MyRestaurantFragment()).commit();
+//                                                                            }
+//                                                                        }
+//                                                                    });
+                                                                }
+                                                            }
+                                                        });
+
+
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+            }
+        });
+
         btn_select_restaurant_logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,8 +310,6 @@ public class MyRestaurantTab extends Fragment {
                 activityResultLauncher.launch(intent);
             }
         });
-
-
 
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override

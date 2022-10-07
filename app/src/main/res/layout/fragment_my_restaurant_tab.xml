@@ -245,8 +245,24 @@
         android:textColor="@color/white"
         android:backgroundTint="@color/unfocused"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_deleteRestaurant"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_restaurantAddressField" />
+
+    <Button
+        android:id="@+id/btn_deleteRestaurant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/deleteRestaurant"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/gph_dark_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_addNewRestaurant"
         app:layout_constraintTop_toBottomOf="@+id/tv_restaurantAddressField" />
 
 

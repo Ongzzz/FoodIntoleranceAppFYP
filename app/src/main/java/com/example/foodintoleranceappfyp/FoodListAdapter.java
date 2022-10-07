@@ -31,11 +31,12 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.w3c.dom.Document;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -504,6 +505,67 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
 
                 if(fragment.equals("Admin"))
                 {
+                    AlertDialog alertDialog = new AlertDialog.Builder(context)
+                            .setTitle("About this food...")
+                            .setMessage("Delete this food?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    DocumentReference foodReference = fStore.collection("foods")
+                                            .document(arrayList.get(position).getRestaurantName()+arrayList.get(position).getName());
+
+                                    foodReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful())
+                                            {
+                                                CollectionReference restaurantListReference = fStore.collection("restaurants");
+                                                restaurantListReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if(task.isSuccessful())
+                                                        {
+                                                            for(DocumentSnapshot ds : task.getResult())
+                                                            {
+                                                                if(ds.getString("Restaurant Name").equals(arrayList.get(position).getRestaurantName()))
+                                                                {
+                                                                    ArrayList<String> menu = (ArrayList)ds.get("Menu");
+                                                                    menu.remove(arrayList.get(position).getName());
+                                                                    Map<String, Object> updatedMenu = new HashMap<>();
+                                                                    updatedMenu.put("Menu",menu);
+                                                                    DocumentReference restaurantReference = fStore.collection("restaurants").document(ds.getId());
+                                                                    restaurantReference.update(updatedMenu).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if(task.isSuccessful())
+                                                                            {
+                                                                                StorageReference storageReference = FirebaseStorage.getInstance().getReference(arrayList.get(position).getImagePath());
+                                                                                storageReference.delete();
+                                                                                arrayList.remove(position);
+                                                                                notifyDataSetChanged();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                    break;
+
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
 
                 }
 
@@ -562,15 +624,13 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     sameRestaurant = true;
-                                                                    Map<String, Object> newCart = new HashMap<>();
-                                                                    newCart.put("Cart", "");
-                                                                    newCart.put("Patient Name", patientName);
-                                                                    newCart.put("Restaurant Name", food.getRestaurantName());
-                                                                    cartReference.set(newCart);
-
                                                                     addedFoodList.clear();
                                                                     addedFoodList.add(food);
-                                                                    cartReference.update("Cart",addedFoodList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    Map<String, Object> newCart = new HashMap<>();
+                                                                    newCart.put("Cart", addedFoodList);
+                                                                    newCart.put("Patient Name", patientName);
+                                                                    newCart.put("Restaurant Name", food.getRestaurantName());
+                                                                    cartReference.set(newCart).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                             if(task.isSuccessful())
@@ -579,6 +639,7 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                                                                             }
                                                                         }
                                                                     });
+
                                                                 }
                                                             });
                                                         }
@@ -602,25 +663,16 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                                         }
 
                                     }
-
-//                                    Map<String, Object> existingCart = new HashMap<>();
-//                                    existingCart.put("Cart", "");
-//                                    existingCart.put("Patient Name", patientName);
-//                                    existingCart.put("Restaurant Name", food.getRestaurantName());
-//                                    cartReference.set(existingCart);
-
-
                                 }
                                 if(sameRestaurant)
                                 {
+                                    addedFoodList.add(food);
+
                                     Map<String, Object> existingCart = new HashMap<>();
-                                    existingCart.put("Cart", "");
+                                    existingCart.put("Cart", addedFoodList);
                                     existingCart.put("Patient Name", patientName);
                                     existingCart.put("Restaurant Name", food.getRestaurantName());
-                                    cartReference.set(existingCart);
-
-                                    addedFoodList.add(food);
-                                    cartReference.update("Cart",addedFoodList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    cartReference.set(existingCart).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful())
@@ -629,6 +681,16 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                                             }
                                         }
                                     });
+
+//                                    cartReference.update("Cart",addedFoodList).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<Void> task) {
+//                                            if(task.isSuccessful())
+//                                            {
+//                                                Toast.makeText(context,food.getName()+" is added to your cart", Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        }
+//                                    });
                                 }
 
 
@@ -645,6 +707,69 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
             @Override
             public void onClick(View v) {
 
+                cartReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists())
+                            {
+                                Bundle bundle = new Bundle();
+                                if(restaurant.getRestaurantName().equals(documentSnapshot.getString("Restaurant Name"))) //same menu
+                                {
+                                    bundle.putSerializable("Restaurant",restaurant);
+                                    MainActivity activity = (MainActivity) context;
+                                    CheckoutFragment checkoutFragment = new CheckoutFragment();
+                                    checkoutFragment.setArguments(bundle);
+
+                                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            checkoutFragment).commit();
+                                }
+                                else //different menu
+                                {
+                                    CollectionReference restaurantListReference = fStore.collection("restaurants");
+                                    restaurantListReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful())
+                                            {
+                                                for (DocumentSnapshot ds : task.getResult())
+                                                {
+                                                    if(ds.getString("Restaurant Name").equals(documentSnapshot.getString("Restaurant Name")))
+                                                    {
+                                                        restaurant = new Restaurant(ds.getString("Restaurant Name"),
+                                                                ds.getString("Restaurant Address"),
+                                                                ds.getString("Restaurant State"),
+                                                                ds.getString("Restaurant Owner Email"),
+                                                                (ArrayList)ds.get("Menu"),
+                                                                ds.getString("Restaurant Logo"));
+                                                        break;
+                                                    }
+
+                                                }
+                                                bundle.putSerializable("Restaurant",restaurant);
+                                                MainActivity activity = (MainActivity) context;
+                                                CheckoutFragment checkoutFragment = new CheckoutFragment();
+                                                checkoutFragment.setArguments(bundle);
+
+                                                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                        checkoutFragment).commit();
+                                            }
+                                        }
+                                    });
+
+                                }
+
+                            }
+                            else
+                            {
+                                Toast.makeText(context,"The cart is empty!",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+
             }
         });
 
@@ -653,7 +778,7 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
             public void onClick(View v) {
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("restaurant", restaurant);
+                bundle.putSerializable("Restaurant", restaurant);
 
                 MainActivity activity = (MainActivity) context;
                 AddFoodFragment fragment = new AddFoodFragment();

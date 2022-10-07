@@ -63,7 +63,7 @@ public class ConsultPatientFragment extends Fragment{
                     for(DocumentSnapshot documentSnapshot : task.getResult())
                     {
                         if(documentSnapshot.getString("Doctor Email").equals(userId) &&
-                                documentSnapshot.getString("Status").equals("Pending"))
+                                documentSnapshot.getString("Status").equals("Approved"))
                         {
                             doctorName = documentSnapshot.getString("Doctor Name");
                             patientEmail = documentSnapshot.getString("Patient Email");
@@ -138,7 +138,7 @@ public class ConsultPatientFragment extends Fragment{
                             for(DocumentSnapshot documentSnapshot : task.getResult())
                             {
                                 if(documentSnapshot.getString("Doctor Email").equals(userId) &&
-                                        documentSnapshot.getString("Status").equals("Pending"))
+                                        documentSnapshot.getString("Status").equals("Approved"))
                                 {
                                     doctorName = documentSnapshot.getString("Doctor Name");
                                     patientEmail = documentSnapshot.getString("Patient Email");

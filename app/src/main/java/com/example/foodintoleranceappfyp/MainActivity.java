@@ -3,9 +3,11 @@ package com.example.foodintoleranceappfyp;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,12 +18,23 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.razorpay.PaymentResultListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -32,7 +45,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CheckoutFragment.OnCallbackReceived, PaymentResultListener {
 
     private DrawerLayout drawer;
     FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -40,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String userId = fAuth.getCurrentUser().getEmail();
     DocumentReference documentReference = fStore.collection("users").document(userId);
     CollectionReference collectionReference = fStore.collection("appointments");
+    Restaurant restaurant;
+    NavigationView navigationView;
 
     String name;
     String userType;
@@ -54,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View view = navigationView.getHeaderView(0);
@@ -274,6 +289,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
     }
 
 //    private interface FireStoreCallback
@@ -303,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        });
 //    }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
@@ -330,6 +349,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new RestaurantOwnerProfileFragment()).commit();
+                break;
+
+            case R.id.nav_pendingOrder:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new PendingOrderFragment()).commit();
                 break;
 
             case R.id.nav_myRestaurant:
@@ -370,12 +394,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ApprovePendingFoodFragment()).commit();
                 break;
 
-//            case R.id.nav_nearbyFacility:
-//
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new NearbyHealthFacilityFragment()).commit();
-//                break;
-
             case R.id.nav_viewRecipe:
 
                 break;
@@ -388,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_orderHistory:
 
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new PatientOrderHistoryFragment()).commit();
                 break;
 
             case R.id.nav_consultPatient:
@@ -456,6 +476,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new MenuTab()).commit();
             }
+            else if(fragment instanceof CheckoutFragment)
+            {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Restaurant", restaurant);
+                FoodFragment foodFragment = new FoodFragment();
+                foodFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        foodFragment).commit();
+            }
+            else if(fragment instanceof CompletedOrderFragment)
+            {
+                Bundle bundle = new Bundle();
+                bundle.putInt("tab",2);
+                MyRestaurantFragment myRestaurantFragment = new MyRestaurantFragment();
+                myRestaurantFragment.setArguments(bundle);
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        myRestaurantFragment).commit();
+            }
             else
             {
                 AlertDialog alertDialog = new AlertDialog.Builder(this)
@@ -476,5 +515,115 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
+
+
+    @Override
+    public void getRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        //initialize alert dialog
+//        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this)
+//                .setTitle("Order successfully")
+//                .setMessage("Redirecting you to order page...");
+//        builder.show();
+
+        Toast.makeText(getApplicationContext(),"Order successfully! Redirecting you to order page", Toast.LENGTH_SHORT).show();
+
+        DocumentReference cartReference = fStore.collection("carts").document(userId);
+        cartReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    String patientName = documentSnapshot.getString("Patient Name");
+                    String restaurantName = documentSnapshot.getString("Restaurant Name");
+                    ArrayList<Map<String, Object>> foodsInCart = (ArrayList<Map<String, Object>>) documentSnapshot.get("Cart");
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                    String orderDateTime = sdf.format(new Date());
+
+                    DocumentReference orderReference = fStore.collection("pendingOrders").document(userId+orderDateTime);
+                    Map<String, Object> order = new HashMap<>();
+                    order.put("Ordered Food", foodsInCart);
+                    order.put("Patient Name", patientName);
+                    order.put("Patient Email", userId);
+                    order.put("Restaurant Name", restaurantName);
+                    order.put("Status", "Pending");
+                    order.put("Order DateTime", orderDateTime);
+
+                    CollectionReference restaurantsReference = fStore.collection("restaurants");
+                    restaurantsReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful())
+                            {
+                                for(DocumentSnapshot snapshot : task.getResult())
+                                {
+                                    if(snapshot.getString("Restaurant Name").equals(restaurantName))
+                                    {
+                                        String restaurantOwnerEmail = snapshot.getString("Restaurant Owner Email");
+                                        String senderEmail="foodintoleranceapp53@gmail.com";
+                                        String senderPassword="lkqgijyawiwshwjc";
+                                        String messageToSend="Your restaurant receives a new order. Please proceed to the order page to view the order.";
+                                        Properties props = new Properties();
+                                        props.put("mail.smtp.auth","true");
+                                        props.put("mail.smtp.starttls.enable","true");
+                                        props.put("mail.smtp.host","smtp.gmail.com");
+                                        props.put("mail.smtp.port","587");
+                                        Session session = Session.getInstance(props, new javax.mail.Authenticator(){
+                                            @Override
+                                            protected PasswordAuthentication getPasswordAuthentication() {
+                                                return new PasswordAuthentication(senderEmail,senderPassword);
+                                            }
+                                        });
+
+                                        try {
+                                            Message message = new MimeMessage(session);
+                                            message.setFrom(new InternetAddress(senderEmail));
+                                            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(restaurantOwnerEmail));
+                                            message.setSubject("New Order from Food Intolerance App Patient");
+                                            message.setText(messageToSend);
+                                            Transport.send(message);
+                                        }catch (MessagingException e){
+                                            throw new RuntimeException(e);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    orderReference.set(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            cartReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    navigationView.setCheckedItem(R.id.nav_patient_profile);
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            new PatientOrderHistoryFragment()).commit();
+                                }
+                            });
+                        }
+                    });
+
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        Toast.makeText(getApplicationContext(),s, Toast.LENGTH_SHORT).show();
+
+    }
+
 
 }

@@ -66,7 +66,7 @@ public class AddFoodFragment extends Fragment {
 
         if(bundle != null)
         {
-            Restaurant restaurant = (Restaurant) bundle.getSerializable("restaurant");
+            Restaurant restaurant = (Restaurant) bundle.getSerializable("Restaurant");
             imgView_addFoodImage = view.findViewById(R.id.imgView_addFoodImage);
             Button btn_select_food_image = view.findViewById(R.id.btn_select_food_image);
             EditText et_newFoodName = view.findViewById(R.id.et_newFoodName);
