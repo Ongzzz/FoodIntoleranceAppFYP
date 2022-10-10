@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <!--text view for displaying user message-->
+        <TextView
+            android:id="@+id/tv_patient_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:padding="12dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:text="Patient message"
+            android:textColor="@color/black"
+            android:background="@drawable/round_et"/>
+
+        <!--we are displaying user icon-->
+<!--        <ImageView-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:src="@drawable/ic_person" />-->
+
+    </RelativeLayout>
+

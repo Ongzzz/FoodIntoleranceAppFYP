@@ -267,22 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
             });
-//                fetchData(new FireStoreCallback() {
-//                    @Override
-//                    public void onCallback(AppUser user) {
-//                        if(user.getUserType().equals("Admin"))
-//                        {
-//                            tv_nameFirstChar.setText(userId.substring(0,1));
-//                            tv_username.setText(userId);
-//                        }
-//                        else
-//                        {
-//                            tv_nameFirstChar.setText(user.getName().substring(0,1));
-//                            tv_username.setText(user.getName());
-//                        }
-//
-//                    }
-//                });
+
             }
         };
 
@@ -293,34 +278,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StrictMode.setThreadPolicy(policy);
 
     }
-
-//    private interface FireStoreCallback
-//    {
-//        void onCallback(AppUser user);
-//    }
-//
-//    private void fetchData(FireStoreCallback fireStoreCallback)
-//    {
-//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful())
-//                {
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//                    if (documentSnapshot != null)
-//                    {
-//                        name = documentSnapshot.getString("Name");
-//                        userType = documentSnapshot.getString("UserType");
-//                        AppUser user = new AppUser(name, userType);
-//
-//                        fireStoreCallback.onCallback(user);
-//
-//                    }
-//                }
-//            }
-//        });
-//    }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
@@ -429,7 +386,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_AIDoctor:
-
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new AIDoctorFragment()).commit();
                 break;
 
             case R.id.nav_logout:

@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/welcomeNewDoctor"
         android:textColor="@color/teal_700"
         android:textSize="25dp"
         android:textStyle="bold"
+        android:text="@string/welcomeNewDoctor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

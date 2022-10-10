@@ -13,7 +13,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FoodIntoleranceAppFYP">
+        android:theme="@style/Theme.FoodIntoleranceAppFYP"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -94,6 +96,8 @@
 
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
