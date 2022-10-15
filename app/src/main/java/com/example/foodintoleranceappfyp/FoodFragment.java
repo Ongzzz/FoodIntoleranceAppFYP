@@ -191,7 +191,7 @@ public class FoodFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("restaurant", restaurant);
+                    bundle.putSerializable("Restaurant", restaurant);
 
                     //MainActivity activity = (MainActivity) context;
                     AddFoodFragment fragment = new AddFoodFragment();

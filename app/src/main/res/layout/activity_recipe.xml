@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fadeScrollbars="false"
+    tools:context=".RecipeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgView_recipe_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            tools:srcCompat="@tools:sample/avatars"
+            android:layout_margin="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/btn_select_recipe_new_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/unfocused"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/select"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/imgView_recipe_image"
+            app:layout_constraintBottom_toTopOf="@+id/tv_recipe_URL"
+            app:layout_constraintStart_toStartOf="@+id/imgView_recipe_image"
+            app:layout_constraintEnd_toEndOf="@+id/imgView_recipe_image"/>
+
+        <Button
+            android:id="@+id/btn_update_recipe_new_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/unfocused"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/uploadNewImage"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_select_recipe_new_image"
+            app:layout_constraintTop_toTopOf="@+id/btn_select_recipe_new_image"
+            app:layout_constraintStart_toEndOf="@+id/btn_select_recipe_new_image"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_recipe_name"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/recipeName"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:background="@drawable/round_et"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_recipe_intolerance"
+            app:layout_constraintStart_toEndOf="@+id/imgView_recipe_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imgView_changeRecipeName"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:src="@drawable/ic_change"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/tv_recipe_name"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/tv_recipe_name"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/tv_recipe_name"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"/>-->
+
+        <TextView
+            android:id="@+id/tv_recipe_intolerance"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/intolerant"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:background="@drawable/round_et"
+            android:textColor="@color/gph_dark_red"
+            app:layout_constraintStart_toEndOf="@+id/imgView_recipe_image"
+            app:layout_constraintTop_toBottomOf="@+id/tv_recipe_name"
+            app:layout_constraintBottom_toTopOf="@+id/btn_update_recipe_new_image"
+            android:layout_marginLeft="30dp" />
+
+        <ImageView
+            android:id="@+id/imgView_changeRecipeIntolerance"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_change"
+            android:layout_marginLeft="7dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_recipe_intolerance"
+            app:layout_constraintTop_toTopOf="@+id/tv_recipe_intolerance"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_recipe_intolerance"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_recipe_URL"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/recipeVideoURL"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:padding="5dp"
+            android:background="@drawable/round_et"
+            app:layout_constraintTop_toBottomOf="@+id/btn_select_recipe_new_image"
+            app:layout_constraintBottom_toTopOf="@+id/yt_player"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="30dp"/>
+
+        <ImageView
+            android:id="@+id/imgView_changeRecipeURL"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_change"
+            android:layout_marginLeft="7dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_recipe_URL"
+            app:layout_constraintTop_toTopOf="@+id/tv_recipe_URL"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_recipe_URL"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/imgView_playVideo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_play_video"
+            app:layout_constraintBottom_toBottomOf="@+id/vv_player"
+            app:layout_constraintTop_toTopOf="@+id/vv_player"
+            app:layout_constraintStart_toStartOf="@+id/vv_player"
+            app:layout_constraintEnd_toEndOf="@+id/vv_player"/>
+
+        <VideoView
+            android:id="@+id/vv_player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintDimensionRatio="3:4"
+            app:layout_constraintTop_toTopOf="@+id/yt_player"
+            app:layout_constraintBottom_toBottomOf="@+id/yt_player"
+            app:layout_constraintStart_toStartOf="@+id/yt_player"
+            app:layout_constraintEnd_toEndOf="@+id/yt_player"/>
+
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/yt_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_recipe_URL"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_recipe_description"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/recipeDescription"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:padding="5dp"
+            android:background="@drawable/round_et"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/yt_player"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="50dp"/>
+
+        <ImageView
+            android:id="@+id/imgView_changeRecipeDescription"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_change"
+            android:layout_marginLeft="7dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_recipe_description"
+            app:layout_constraintTop_toTopOf="@+id/tv_recipe_description"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_recipe_description"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

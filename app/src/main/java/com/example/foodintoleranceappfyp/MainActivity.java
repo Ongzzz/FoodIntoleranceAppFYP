@@ -59,10 +59,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String name;
     String userType;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
 
         View view = navigationView.getHeaderView(0);
         TextView tv_nameFirstChar = view.findViewById(R.id.tv_nameFirstChar);
@@ -144,55 +149,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful())
-                {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if (documentSnapshot != null)
+        Intent i = getIntent();
+        if(i.getStringExtra("RecipeListFragment")!=null)
+        {
+            i.removeExtra("RecipeListFragment");
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.admin_menu);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new RecipeListFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_viewRecipe);
+        }
+        else
+        {
+            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful())
                     {
-                        name = documentSnapshot.getString("Name");
-                        userType = documentSnapshot.getString("UserType");
-                        AppUser user = new AppUser(name, userType);
-
-                        if(user.getUserType().equals("Admin"))
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot != null)
                         {
-                            navigationView.getMenu().clear();
-                            navigationView.inflateMenu(R.menu.admin_menu);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    new AdminProfileFragment()).commit();
-                            navigationView.setCheckedItem(R.id.nav_admin_profile);
-                        }
+                            name = documentSnapshot.getString("Name");
+                            userType = documentSnapshot.getString("UserType");
+                            AppUser user = new AppUser(name, userType);
 
-                        if(user.getUserType().equals("Doctor") || user.getUserType().equals("Pending Doctor"))
-                        {
-                            navigationView.getMenu().clear();
-                            navigationView.inflateMenu(R.menu.doctor_menu);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    new DoctorProfileFragment()).commit();
-                            navigationView.setCheckedItem(R.id.nav_doctor_profile);
-                        }
+                            if(user.getUserType().equals("Admin"))
+                            {
+                                navigationView.getMenu().clear();
+                                navigationView.inflateMenu(R.menu.admin_menu);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        new AdminProfileFragment()).commit();
+                                navigationView.setCheckedItem(R.id.nav_admin_profile);
+                            }
 
-                        if(user.getUserType().equals("Restaurant Owner"))
-                        {
-                            navigationView.getMenu().clear();
-                            navigationView.inflateMenu(R.menu.restaurant_owner_menu);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    new RestaurantOwnerProfileFragment()).commit();
-                            navigationView.setCheckedItem(R.id.nav_restaurant_owner_profile);
-                        }
+                            if(user.getUserType().equals("Doctor") || user.getUserType().equals("Pending Doctor"))
+                            {
+                                navigationView.getMenu().clear();
+                                navigationView.inflateMenu(R.menu.doctor_menu);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        new DoctorProfileFragment()).commit();
+                                navigationView.setCheckedItem(R.id.nav_doctor_profile);
+                            }
 
-                        if(user.getUserType().equals("Patient"))
-                        {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                    new PatientProfileFragment()).commit();
-                            navigationView.setCheckedItem(R.id.nav_patient_profile);
+                            if(user.getUserType().equals("Restaurant Owner"))
+                            {
+                                navigationView.getMenu().clear();
+                                navigationView.inflateMenu(R.menu.restaurant_owner_menu);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        new RestaurantOwnerProfileFragment()).commit();
+                                navigationView.setCheckedItem(R.id.nav_restaurant_owner_profile);
+                            }
+
+                            if(user.getUserType().equals("Patient"))
+                            {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        new PatientProfileFragment()).commit();
+                                navigationView.setCheckedItem(R.id.nav_patient_profile);
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
+
 
 
 //        fetchData(new FireStoreCallback() {
@@ -274,10 +293,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
@@ -351,8 +373,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ApprovePendingFoodFragment()).commit();
                 break;
 
+            case R.id.nav_addRecipe:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new AddRecipeFragment()).commit();
+                break;
+
             case R.id.nav_viewRecipe:
 
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new RecipeListFragment()).commit();
                 break;
 
             case R.id.nav_appointment:
@@ -453,6 +483,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         myRestaurantFragment).commit();
             }
+
             else
             {
                 AlertDialog alertDialog = new AlertDialog.Builder(this)

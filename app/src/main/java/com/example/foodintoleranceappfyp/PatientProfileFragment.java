@@ -188,7 +188,7 @@ public class PatientProfileFragment extends Fragment {
                                 }
                                 else
                                 {
-                                    List<String> intoleranceList = new ArrayList<>();
+                                    ArrayList<String> intoleranceList = new ArrayList<>();
                                     if(change_gluten.isChecked())
                                     {
                                         intoleranceList.add("gluten");

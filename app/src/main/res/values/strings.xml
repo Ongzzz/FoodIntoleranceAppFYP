@@ -95,6 +95,13 @@
     <string name="getDirection">Get Direction</string>
     <string name="pending_order">Pending Order</string>
     <string name="deleteRestaurant">Delete Restaurant</string>
+    <string name="recipeName">Recipe Name</string>
+    <string name="recipeDescription">Recipe Description and Step</string>
+    <string name="recipeVideoURL">Recipe Video URL (if available)</string>
+    <string name="addRecipe">Add Recipe</string>
+    <string name="updateRecipe">Confirm Changes</string>
+    <string name="uploadNewImage">Upload New Image</string>
+    <string name="url_information">Only MP4, WEBM, and YouTube video are supported.</string>
 
     <string-array name="userType_array">
         <item>Please select a user type</item>

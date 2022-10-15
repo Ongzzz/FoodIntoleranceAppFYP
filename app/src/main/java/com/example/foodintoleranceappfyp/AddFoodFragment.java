@@ -67,6 +67,7 @@ public class AddFoodFragment extends Fragment {
         if(bundle != null)
         {
             Restaurant restaurant = (Restaurant) bundle.getSerializable("Restaurant");
+            Toast.makeText(getContext(),restaurant.getRestaurantName(),Toast.LENGTH_SHORT).show();
             imgView_addFoodImage = view.findViewById(R.id.imgView_addFoodImage);
             Button btn_select_food_image = view.findViewById(R.id.btn_select_food_image);
             EditText et_newFoodName = view.findViewById(R.id.et_newFoodName);
@@ -162,20 +163,27 @@ public class AddFoodFragment extends Fragment {
                                     else
                                     {
                                         //Double d = Double.parseDouble(foodPrice);
-                                        String[] splitter = foodPrice.split("\\.");
-                                        splitter[0].length();   // Before Decimal Count
-                                        splitter[1].length();   // After  Decimal Count
-                                        //Toast.makeText(getContext(), String.valueOf(splitter[1].length()), Toast.LENGTH_SHORT).show();
-                                        if(splitter[1].length()<2)
+                                        if(foodPrice.contains("."))
                                         {
-                                            et_newFoodPrice.setError("There should be 2 number after .");
-                                            valid = false;
+                                            String[] splitter = foodPrice.split("\\.");
+                                            //splitter[0].length();   // Before Decimal Count
+                                            //splitter[1].length();   // After  Decimal Count
+                                            //Toast.makeText(getContext(), String.valueOf(splitter[1].length()), Toast.LENGTH_SHORT).show();
+
+                                            if(splitter[1].length()<2)
+                                            {
+                                                et_newFoodPrice.setError("There should be 2 number after .");
+                                                valid = false;
+                                            }
+                                            if(splitter[1].length()>2)
+                                            {
+                                                et_newFoodPrice.setError("At most 2 decimal places are acceptable!");
+                                                valid = false;
+                                            }
                                         }
-                                        if(splitter[1].length()>2)
-                                        {
-                                            et_newFoodPrice.setError("At most 2 decimal places are acceptable!");
-                                            valid = false;
-                                        }
+
+
+
                                     }
 
 
@@ -190,13 +198,7 @@ public class AddFoodFragment extends Fragment {
 
                                 if(valid)
                                 {
-                                    //DecimalFormat df = new DecimalFormat("0.00");
-
                                     Double price = Double.valueOf(et_newFoodPrice.getText().toString());
-//                        BigDecimal bd=new BigDecimal(price).setScale(2);
-//                        price = bd.doubleValue();
-                                    //foodPrice = String.format("%.2f", price);
-                                    //price = Double.valueOf(foodPrice);
 
                                     ProgressDialog progressDialog
                                             = new ProgressDialog(getContext());
@@ -235,16 +237,6 @@ public class AddFoodFragment extends Fragment {
                                         @Override
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-//                                DocumentReference restaurantReference = fStore.collection("restaurants").document(restaurant.getRestaurantOwnerEmail()+restaurant.getRestaurantName());
-//                                Map<String, Object> updateMenu = new HashMap<>();
-                                            //Food food = new Food(foodName, foodDescription, Integer.valueOf(foodPrice), intolerance, filePath, restaurant.getRestaurantName());
-//                                updateMenu.put("Menu", food);
-//                                restaurantReference.update(updateMenu).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Toast.makeText(getContext(),"The food is added successfully! ", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                });
                                             if(progressDialog.isShowing())
                                             {
                                                 progressDialog.dismiss();
@@ -261,7 +253,7 @@ public class AddFoodFragment extends Fragment {
                                             {
                                                 progressDialog.dismiss();
                                             }
-                                            //Toast.makeText(getContext(),"Some error occurs... Please try again.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(),"Some error occurs... Please try again.", Toast.LENGTH_SHORT).show();
                                         }
                                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                         @Override

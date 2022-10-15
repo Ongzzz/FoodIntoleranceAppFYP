@@ -44,7 +44,7 @@ public class PendingFoodFragment extends Fragment {
 
         if(bundle != null)
         {
-            Restaurant restaurant = (Restaurant) bundle.getSerializable("restaurant");
+            Restaurant restaurant = (Restaurant) bundle.getSerializable("Restaurant");
 
             TextView tv_no_pending_food = view.findViewById(R.id.tv_no_pending_food);
             ListView lv_pending_food_list = view.findViewById(R.id.lv_pending_food_list);

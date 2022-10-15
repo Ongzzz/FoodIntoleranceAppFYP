@@ -10,6 +10,26 @@
             android:title="My Profile" />
 
         <item
+            android:id="@+id/nav_addRecipe"
+            android:icon="@drawable/ic_add_recipe"
+            android:title="Add Recipe" />
+
+        <item
+            android:id="@+id/nav_approveDoctor"
+            android:icon="@drawable/ic_add_person"
+            android:title="Approve Doctor" />
+
+        <item
+            android:id="@+id/nav_approveFood"
+            android:icon="@drawable/ic_restaurant_name"
+            android:title="Approve Food" />
+
+        <item
+            android:id="@+id/nav_viewRecipe"
+            android:icon="@drawable/ic_view_recipe"
+            android:title="View Recipe" />
+
+        <item
             android:id="@+id/nav_all_user"
             android:icon="@drawable/ic_doctor_list"
             android:title="All User" />
@@ -24,20 +44,9 @@
             android:icon="@drawable/ic_record"
             android:title="All Consultation Records" />
 
-        <item
-            android:id="@+id/nav_approveDoctor"
-            android:icon="@drawable/ic_add_person"
-            android:title="Approve Doctor" />
 
-        <item
-            android:id="@+id/nav_approveFood"
-            android:icon="@drawable/ic_restaurant_name"
-            android:title="Approve Food" />
 
-        <item
-            android:id="@+id/nav_addRecipe"
-            android:icon="@drawable/ic_add_recipe"
-            android:title="Add Recipe" />
+
 
 
     </group>
