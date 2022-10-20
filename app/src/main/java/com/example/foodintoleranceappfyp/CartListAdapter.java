@@ -1,25 +1,27 @@
 package com.example.foodintoleranceappfyp;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gkash.gkashandroidsdk.GkashPayment;
+import com.gkash.gkashandroidsdk.PaymentRequest;
+import com.gkash.gkashandroidsdk.PaymentResponse;
+import com.gkash.gkashandroidsdk.TransStatusCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,17 +36,12 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import com.razorpay.Checkout;
-import com.razorpay.PaymentResultListener;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -58,9 +55,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import androidx.annotation.NonNull;
-import androidx.core.text.HtmlCompat;
 
-public class CartListAdapter extends BaseAdapter implements android.widget.ListAdapter, PaymentResultListener {
+public class CartListAdapter extends BaseAdapter implements android.widget.ListAdapter, TransStatusCallback/*, PaymentResultListener*/ {
 
     private Cart cart;
     private Context context;
@@ -77,6 +73,9 @@ public class CartListAdapter extends BaseAdapter implements android.widget.ListA
     String summary, singleItem;
     double singleItemTotalPrice, totalPrice;
     int quantity;
+
+    // Get instance of GkashPayment
+    final GkashPayment gkashPayment = GkashPayment.getInstance();
 
     public CartListAdapter(Cart cart, Context context, Restaurant restaurant) {
         this.cart = cart;
@@ -320,104 +319,142 @@ public class CartListAdapter extends BaseAdapter implements android.widget.ListA
             @Override
             public void onClick(View v) {
 
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("Restaurant", restaurant);
-//                Intent i = new Intent(context,PaymentActivity.class);
-//                i.putExtras(bundle);
-//                i.putExtra("Total Price", totalPrice);
-//                context.startActivity(i);
+                String merchantID = "M161-U-40563";
+                String signatureKey = "9qrsdIOONgrwYrD";
 
                 MainActivity activity = (MainActivity) context;
-                Checkout checkout = new Checkout();
-                //set key id
-                checkout.setKeyID("rzp_test_WXyqLSujm7ZVOq");
-                //set image
-                checkout.setImage(R.drawable.ic_payment);
-                //initialize json object
-                JSONObject object = new JSONObject();
 
-                try {
-                    //put name
-                    object.put("name","Food Intolerance App");
-                    //put description
-                    object.put("description","Purchase from:"+restaurant.getRestaurantName());
-                    //put theme color
-                    object.put("theme.color","#0093DD");
-                    //put currency unit
-                    object.put("currency","MYR");
-                    //put amount
-                    object.put("amount",totalPrice*100);
-                    //put mobile number
-                    //object.put("prefill.contact", "60185700057");
-                    //put email
-                    object.put("prefill.email", userId);
-                    //open razorpay checkout activity
-                    checkout.open(activity,object);
-                } catch (JSONException e)
+                // Create instance of PaymentRequest
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                String cartID = sdf.format(new Date());
+
+                PaymentRequest request = new PaymentRequest("1.5.0", merchantID, signatureKey, "MYR", BigDecimal.valueOf(totalPrice), cartID, CartListAdapter.this);
+                //set your callback url, email ,mobile number and return url
+                //return url is your app url scheme
+                request.setCallbackUrl("https://paymentdemo.gkash.my/callback.php");
+                request.setEmail(userId);
+                request.setMobileNo("60185700057");
+                request.setReturnUrl("gkash://returntoapp");
+
+                // Set environment and start payment
+                gkashPayment.setProductionEnvironment(false);
+
+                try
                 {
+                    gkashPayment.startPayment(activity, request);
+                }
+                catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
 
             }
         });
 
-//        payPalButton.setup(
-//                new CreateOrder() {
-//                    @Override
-//                    public void create(@NotNull CreateOrderActions createOrderActions) {
-//                        ArrayList<PurchaseUnit> purchaseUnits = new ArrayList<>();
-//                        purchaseUnits.add(
-//                                new PurchaseUnit.Builder()
-//                                        .amount(
-//                                                new Amount.Builder()
-//                                                        .currencyCode(CurrencyCode.USD)
-//                                                        .value("10.00")
-//                                                        .build()
-//                                        )
-//                                        .build()
-//                        );
-//                        Order order = new Order(
-//                                OrderIntent.CAPTURE,
-//                                new AppContext.Builder()
-//                                        .userAction(UserAction.PAY_NOW)
-//                                        .build(),
-//                                purchaseUnits,
-//                                null
-//                        );
-//                        createOrderActions.create(order, (CreateOrderActions.OnOrderCreated) null);
-//                    }
-//                },
-//                new OnApprove() {
-//                    @Override
-//                    public void onApprove(@NotNull Approval approval) {
-//                        approval.getOrderActions().capture(new OnCaptureComplete() {
-//                            @Override
-//                            public void onCaptureComplete(@NotNull CaptureOrderResult result) {
-//                                Log.i("CaptureOrder", String.format("CaptureOrderResult: %s", result));
-//                            }
-//                        });
-//                    }
-//                }
-//
-//
-//        );
-
-
-
         return convertView;
     }
 
     @Override
-    public void onPaymentSuccess(String s) {
-        //initialize alert dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                .setTitle("Payment")
-                .setMessage(s);
-        builder.show();
+    public void onStatusCallback(PaymentResponse response) {
+        if (response != null)
+        {
+            if(response.status.equals("88 - Transferred") && response.description.equals("00 - Approved"))
+            {
+                MainActivity activity = (MainActivity) context;
+
+                Toast.makeText(context,"Order successfully! Redirecting you to order page", Toast.LENGTH_SHORT).show();
+
+                cartReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            String patientName = documentSnapshot.getString("Patient Name");
+                            String restaurantName = documentSnapshot.getString("Restaurant Name");
+                            ArrayList<Map<String, Object>> foodsInCart = (ArrayList<Map<String, Object>>) documentSnapshot.get("Cart");
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                            String orderDateTime = sdf.format(new Date());
+
+                            DocumentReference orderReference = fStore.collection("pendingOrders").document(userId+orderDateTime);
+                            Map<String, Object> order = new HashMap<>();
+                            order.put("Ordered Food", foodsInCart);
+                            order.put("Patient Name", patientName);
+                            order.put("Patient Email", userId);
+                            order.put("Restaurant Name", restaurantName);
+                            order.put("Status", "Pending");
+                            order.put("Order DateTime", orderDateTime);
+
+                            CollectionReference restaurantsReference = fStore.collection("restaurants");
+                            restaurantsReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        for(DocumentSnapshot snapshot : task.getResult())
+                                        {
+                                            if(snapshot.getString("Restaurant Name").equals(restaurantName))
+                                            {
+                                                String restaurantOwnerEmail = snapshot.getString("Restaurant Owner Email");
+                                                String senderEmail="foodintoleranceapp53@gmail.com";
+                                                String senderPassword="lkqgijyawiwshwjc";
+                                                String messageToSend="Your restaurant receives a new order. Please proceed to the order page to view the order.";
+                                                Properties props = new Properties();
+                                                props.put("mail.smtp.auth","true");
+                                                props.put("mail.smtp.starttls.enable","true");
+                                                props.put("mail.smtp.host","smtp.gmail.com");
+                                                props.put("mail.smtp.port","587");
+                                                Session session = Session.getInstance(props, new javax.mail.Authenticator(){
+                                                    @Override
+                                                    protected PasswordAuthentication getPasswordAuthentication() {
+                                                        return new PasswordAuthentication(senderEmail,senderPassword);
+                                                    }
+                                                });
+
+                                                try {
+                                                    javax.mail.Message message = new MimeMessage(session);
+                                                    message.setFrom(new InternetAddress(senderEmail));
+                                                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(restaurantOwnerEmail));
+                                                    message.setSubject("New Order from Food Intolerance App Patient");
+                                                    message.setText(messageToSend);
+                                                    Transport.send(message);
+                                                }catch (MessagingException e){
+                                                    throw new RuntimeException(e);
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            orderReference.set(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    cartReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            activity.navigationView.setCheckedItem(R.id.nav_orderHistory);
+                                            activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                    new PatientOrderHistoryFragment()).commit();
+                                        }
+                                    });
+                                }
+                            });
+
+                        }
+                    }
+                });
+            }
+            else
+            {
+                Toast.makeText(context,"Transaction Failed...Please try again later.",Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
-    @Override
-    public void onPaymentError(int i, String s) {
-        Toast.makeText(context,s, Toast.LENGTH_SHORT).show();
-    }
+
 }

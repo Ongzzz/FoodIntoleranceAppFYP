@@ -73,6 +73,7 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
     Recipe recipe;
     YouTubePlayerView yt_player;
     YouTubePlayer youtubePlayer;
+    String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,7 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
         if(intent!=null)
         {
             recipe = (Recipe)intent.getSerializableExtra("Recipe");
-            String user = intent.getStringExtra("UserType");
+            user = intent.getStringExtra("UserType");
 
             recipeReference = fStore.collection("recipes").document(recipe.getRecipeName());
 
@@ -562,7 +563,14 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
     public void onBackPressed() {
 
         Intent i = new Intent(RecipeActivity.this, MainActivity.class);
-        i.putExtra("RecipeListFragment","RecipeListFragment");
+        if(user.equals("Patient"))
+        {
+            i.putExtra("RecipeListFragment","PatientRecipeListFragment");
+        }
+        if(user.equals("Admin"))
+        {
+            i.putExtra("RecipeListFragment","AdminRecipeListFragment");
+        }
         startActivity(i);
     }
 

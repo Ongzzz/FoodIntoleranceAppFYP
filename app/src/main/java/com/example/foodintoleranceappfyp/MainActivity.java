@@ -7,7 +7,6 @@ import android.os.StrictMode;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,23 +17,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.razorpay.PaymentResultListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -45,7 +33,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CheckoutFragment.OnCallbackReceived, PaymentResultListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, CheckoutFragment.OnCallbackReceived {
 
     private DrawerLayout drawer;
     FirebaseAuth fAuth = FirebaseAuth.getInstance();
@@ -134,12 +122,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if(!documentSnapshot.getString("Status").equals("Consulted"))
                         {
                             if((past) || (sameDay && (documentSnapshot.getLong("Hour").intValue() == currentHour
-                                && documentSnapshot.getLong("Minute").intValue() > currentMinute+15)))
+                                    && documentSnapshot.getLong("Minute").intValue() > currentMinute+15)))
                             {
                                 Map<String, Object> expired = new HashMap<>();
                                 expired.put("Status","Expired");
                                 DocumentReference appointmentReference = fStore.collection("appointments")
-                                .document(documentSnapshot.getId());
+                                        .document(documentSnapshot.getId());
 
                                 appointmentReference.update(expired);
                             }
@@ -152,9 +140,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent i = getIntent();
         if(i.getStringExtra("RecipeListFragment")!=null)
         {
+            if(i.getStringExtra("RecipeListFragment").equals("AdminRecipeListFragment"))
+            {
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.admin_menu);
+            }
             i.removeExtra("RecipeListFragment");
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.admin_menu);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new RecipeListFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_viewRecipe);
@@ -212,48 +203,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
 
-
-
-//        fetchData(new FireStoreCallback() {
-//            @Override
-//            public void onCallback(AppUser user) {
-//
-//                if(user.getUserType().equals("Admin"))
-//                {
-//                    navigationView.getMenu().clear();
-//                    navigationView.inflateMenu(R.menu.admin_menu);
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new AdminProfileFragment()).commit();
-//                    navigationView.setCheckedItem(R.id.nav_admin_profile);
-//                }
-//
-//                if(user.getUserType().equals("Doctor") || user.getUserType().equals("Pending Doctor"))
-//                {
-//                    navigationView.getMenu().clear();
-//                    navigationView.inflateMenu(R.menu.doctor_menu);
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new DoctorProfileFragment()).commit();
-//                    navigationView.setCheckedItem(R.id.nav_doctor_profile);
-//                }
-//
-//                if(user.getUserType().equals("Restaurant Owner"))
-//                {
-//                    navigationView.getMenu().clear();
-//                    navigationView.inflateMenu(R.menu.restaurant_owner_menu);
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new RestaurantOwnerProfileFragment()).commit();
-//                    navigationView.setCheckedItem(R.id.nav_restaurant_owner_profile);
-//                }
-//
-//                if(user.getUserType().equals("Patient"))
-//                {
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new PatientProfileFragment()).commit();
-//                    navigationView.setCheckedItem(R.id.nav_patient_profile);
-//                }
-//            }
-//        });
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         {
@@ -262,30 +211,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 super.onDrawerOpened(drawerView);
 
                 documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful())
-                    {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        if (documentSnapshot != null)
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful())
                         {
-                            name = documentSnapshot.getString("Name");
-                            userType = documentSnapshot.getString("UserType");
-                            AppUser user = new AppUser(name, userType);
-                            if(user.getUserType().equals("Admin"))
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if (documentSnapshot != null)
                             {
-                                tv_nameFirstChar.setText(userId.substring(0,1));
-                                tv_username.setText(userId);
-                            }
-                            else
-                            {
-                                tv_nameFirstChar.setText(user.getName().substring(0,1));
-                                tv_username.setText(user.getName());
+                                name = documentSnapshot.getString("Name");
+                                userType = documentSnapshot.getString("UserType");
+                                AppUser user = new AppUser(name, userType);
+                                if(user.getUserType().equals("Admin"))
+                                {
+                                    tv_nameFirstChar.setText(userId.substring(0,1));
+                                    tv_username.setText(userId);
+                                }
+                                else
+                                {
+                                    tv_nameFirstChar.setText(user.getName().substring(0,1));
+                                    tv_username.setText(user.getName());
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
 
             }
         };
@@ -509,109 +458,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void getRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
-    }
-
-    @Override
-    public void onPaymentSuccess(String s) {
-        //initialize alert dialog
-//        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this)
-//                .setTitle("Order successfully")
-//                .setMessage("Redirecting you to order page...");
-//        builder.show();
-
-        Toast.makeText(getApplicationContext(),"Order successfully! Redirecting you to order page", Toast.LENGTH_SHORT).show();
-
-        DocumentReference cartReference = fStore.collection("carts").document(userId);
-        cartReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful())
-                {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    String patientName = documentSnapshot.getString("Patient Name");
-                    String restaurantName = documentSnapshot.getString("Restaurant Name");
-                    ArrayList<Map<String, Object>> foodsInCart = (ArrayList<Map<String, Object>>) documentSnapshot.get("Cart");
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                    String orderDateTime = sdf.format(new Date());
-
-                    DocumentReference orderReference = fStore.collection("pendingOrders").document(userId+orderDateTime);
-                    Map<String, Object> order = new HashMap<>();
-                    order.put("Ordered Food", foodsInCart);
-                    order.put("Patient Name", patientName);
-                    order.put("Patient Email", userId);
-                    order.put("Restaurant Name", restaurantName);
-                    order.put("Status", "Pending");
-                    order.put("Order DateTime", orderDateTime);
-
-                    CollectionReference restaurantsReference = fStore.collection("restaurants");
-                    restaurantsReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful())
-                            {
-                                for(DocumentSnapshot snapshot : task.getResult())
-                                {
-                                    if(snapshot.getString("Restaurant Name").equals(restaurantName))
-                                    {
-                                        String restaurantOwnerEmail = snapshot.getString("Restaurant Owner Email");
-                                        String senderEmail="foodintoleranceapp53@gmail.com";
-                                        String senderPassword="lkqgijyawiwshwjc";
-                                        String messageToSend="Your restaurant receives a new order. Please proceed to the order page to view the order.";
-                                        Properties props = new Properties();
-                                        props.put("mail.smtp.auth","true");
-                                        props.put("mail.smtp.starttls.enable","true");
-                                        props.put("mail.smtp.host","smtp.gmail.com");
-                                        props.put("mail.smtp.port","587");
-                                        Session session = Session.getInstance(props, new javax.mail.Authenticator(){
-                                            @Override
-                                            protected PasswordAuthentication getPasswordAuthentication() {
-                                                return new PasswordAuthentication(senderEmail,senderPassword);
-                                            }
-                                        });
-
-                                        try {
-                                            Message message = new MimeMessage(session);
-                                            message.setFrom(new InternetAddress(senderEmail));
-                                            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(restaurantOwnerEmail));
-                                            message.setSubject("New Order from Food Intolerance App Patient");
-                                            message.setText(messageToSend);
-                                            Transport.send(message);
-                                        }catch (MessagingException e){
-                                            throw new RuntimeException(e);
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    orderReference.set(order).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            cartReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    navigationView.setCheckedItem(R.id.nav_patient_profile);
-                                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                            new PatientOrderHistoryFragment()).commit();
-                                }
-                            });
-                        }
-                    });
-
-                }
-            }
-        });
-
-
-    }
-
-    @Override
-    public void onPaymentError(int i, String s) {
-        Toast.makeText(getApplicationContext(),s, Toast.LENGTH_SHORT).show();
-
     }
 
 
