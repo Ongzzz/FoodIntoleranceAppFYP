@@ -28,8 +28,8 @@
 
             <ImageView
                 android:id="@+id/imgView_consultPatient"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 card_view:srcCompat="@drawable/ic_call"
                 android:layout_alignParentRight="true"/>

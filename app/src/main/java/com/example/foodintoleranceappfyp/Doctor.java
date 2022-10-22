@@ -1,15 +1,21 @@
 package com.example.foodintoleranceappfyp;
 
+import android.net.Uri;
+
+import java.util.ArrayList;
+
 public class Doctor {
 
     private String name;
     private String email;
     private String hospital;
+    private ArrayList<String> documentNameList;
 
-    public Doctor(String name, String email,String hospital) {
+    public Doctor(String name, String email, String hospital, ArrayList<String> documentNameList) {
         this.name = name;
         this.email = email;
         this.hospital = hospital;
+        this.documentNameList = documentNameList;
     }
 
     public String getName() {
@@ -35,4 +41,13 @@ public class Doctor {
     public void setHospital(String hospital) {
         this.hospital = hospital;
     }
+
+    public ArrayList<String> getDocumentNameList() {
+        return documentNameList;
+    }
+
+    public void setDocumentNameList(ArrayList<String> documentNameList) {
+        this.documentNameList = documentNameList;
+    }
+
 }

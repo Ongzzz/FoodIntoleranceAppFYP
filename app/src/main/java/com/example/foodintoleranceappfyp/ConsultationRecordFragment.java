@@ -47,10 +47,6 @@ public class ConsultationRecordFragment extends Fragment{
         TextView tv_no_consultation_record = view.findViewById(R.id.tv_no_consultation_record);
         ListView lv_consultation_record = view.findViewById(R.id.lv_consultation_record);
 
-//        tv_no_consultation_record.setText("No patient...");
-//        tv_no_consultation_record.setVisibility(View.VISIBLE);
-//        lv_consultation_record.setVisibility(View.GONE);
-
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -113,15 +109,7 @@ public class ConsultationRecordFragment extends Fragment{
 
                                 else
                                 {
-                                    if(userType.equals("Patient") || userType.equals("Admin"))
-                                    {
-                                        tv_no_consultation_record.setText("No record...");
-                                    }
-                                    if(userType.equals("Doctor"))
-                                    {
-                                        tv_no_consultation_record.setText("No patient...");
-
-                                    }
+                                    tv_no_consultation_record.setText("No record...");
                                     tv_no_consultation_record.setVisibility(View.VISIBLE);
                                     lv_consultation_record.setVisibility(View.GONE);
                                 }
@@ -131,35 +119,6 @@ public class ConsultationRecordFragment extends Fragment{
                 }
             }
         });
-
-//        fetchData(new FireStoreCallback() {
-//            @Override
-//            public void onCallback(ArrayList<Consultation> consultations, String userType) {
-//                Log.d("size",String.valueOf(consultations.size()));
-//
-//                if(!consultations.isEmpty())
-//                {
-//                    tv_no_consultation_record.setVisibility(View.GONE);
-//                    lv_consultation_record.setVisibility(View.VISIBLE);
-//                    lv_consultation_record.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consultation Record"));
-//                }
-//
-//                else
-//                {
-//                    if(userType.equals("Patient") || userType.equals("Admin"))
-//                    {
-//                        tv_no_consultation_record.setText("No record...");
-//                    }
-//                    if(userType.equals("Doctor"))
-//                    {
-//                        tv_no_consultation_record.setText("No patient...");
-//
-//                    }
-//                    tv_no_consultation_record.setVisibility(View.VISIBLE);
-//                    lv_consultation_record.setVisibility(View.GONE);
-//                }
-//            }
-//        });
 
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -228,15 +187,6 @@ public class ConsultationRecordFragment extends Fragment{
 
                                         else
                                         {
-//                                            if(userType.equals("Patient") || userType.equals("Admin"))
-//                                            {
-//                                                tv_no_consultation_record.setText("No record...");
-//                                            }
-//                                            if(userType.equals("Doctor"))
-//                                            {
-//                                                tv_no_consultation_record.setText("No patient...");
-//
-//                                            }
                                             tv_no_consultation_record.setText("No record...");
                                             tv_no_consultation_record.setVisibility(View.VISIBLE);
                                             lv_consultation_record.setVisibility(View.GONE);
@@ -253,74 +203,6 @@ public class ConsultationRecordFragment extends Fragment{
 
         return view;
     }
-
-//    private interface FireStoreCallback
-//    {
-//        void onCallback(ArrayList<Consultation> consultations, String userType);
-//    }
-//
-//    private void fetchData(ConsultationRecordFragment.FireStoreCallback fireStoreCallback)
-//    {
-//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if(task.isSuccessful())
-//                {
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//                    userType = documentSnapshot.getString("UserType");
-//
-//                    collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                            if(task.isSuccessful())
-//                            {
-//                                for (DocumentSnapshot ds : task.getResult())
-//                                {
-//                                    if(userType.equals("Admin"))
-//                                    {
-//                                        patientEmail = ds.getString("Patient Email");
-//                                        patientName = ds.getString("Patient Name");
-//                                        doctorEmail = ds.getString("Doctor Email");
-//                                        doctorName = ds.getString("Doctor Name");
-//                                        dateTime = ds.getString("DateTime");
-//                                        consultations.add(new Consultation(dateTime,patientName,patientEmail,
-//                                                null,null, null, doctorName, doctorEmail));
-//                                    }
-//                                    if(userType.equals("Doctor"))
-//                                    {
-//                                        if(ds.getString("Doctor Email").equals(userId))
-//                                        {
-//                                            patientEmail = ds.getString("Patient Email");
-//                                            patientName = ds.getString("Patient Name");
-//                                            doctorEmail = ds.getString("Doctor Email");
-//                                            doctorName = ds.getString("Doctor Name");
-//                                            dateTime = ds.getString("DateTime");
-//                                            consultations.add(new Consultation(dateTime,patientName,patientEmail,
-//                                                    null,null, null, doctorName, doctorEmail));
-//                                        }
-//                                    }
-//                                    if(userType.equals("Patient"))
-//                                    {
-//                                        if(ds.getString("Patient Email").equals(userId))
-//                                        {
-//                                            patientEmail = ds.getString("Patient Email");
-//                                            patientName = ds.getString("Patient Name");
-//                                            doctorEmail = ds.getString("Doctor Email");
-//                                            doctorName = ds.getString("Doctor Name");
-//                                            dateTime = ds.getString("DateTime");
-//                                            consultations.add(new Consultation(dateTime,patientName,patientEmail,
-//                                                    null,null, null, doctorName, doctorEmail));
-//                                        }
-//                                    }
-//                                }
-//                                fireStoreCallback.onCallback(consultations, userType);
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//    }
 
 }
 

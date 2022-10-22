@@ -74,6 +74,8 @@ dependencies {
 
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
     implementation "com.google.android.gms:play-services-auth:20.2.0"
     implementation ('org.jitsi.react:jitsi-meet-sdk:5.1.0') { transitive = true }
     implementation 'com.dropbox.core:dropbox-core-sdk:4.0.1'

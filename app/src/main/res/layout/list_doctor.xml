@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -20,21 +19,30 @@
 
             <TextView
                 android:id="@+id/tv_doctorInfo"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
-                android:textSize="15dp">
+                android:textSize="14dp">
             </TextView>
 
             <ImageView
+                android:id="@+id/imgView_viewDocument"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                card_view:srcCompat="@drawable/ic_pdf"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="40dp"/>
+
+            <ImageView
                 android:id="@+id/imgView_managePendingDoctor"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 card_view:srcCompat="@drawable/ic_manage_user"
                 android:layout_alignParentRight="true"/>
-
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>

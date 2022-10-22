@@ -29,6 +29,7 @@ public class ApprovePendingDoctorFragment extends Fragment {
     String name;
     String email;
     String hospital;
+    ArrayList<String> documentNameList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -53,8 +54,8 @@ public class ApprovePendingDoctorFragment extends Fragment {
                         name = documentSnapshot.getString("Name");
                         email = documentSnapshot.getString("Email");
                         hospital = documentSnapshot.getString("Hospital");
-
-                        Doctor doctor = new Doctor(name, email, hospital);
+                        documentNameList = (ArrayList<String>)documentSnapshot.get("Document Path");
+                        Doctor doctor = new Doctor(name, email, hospital, documentNameList);
                         pendingDoctorList.add(doctor);
                     }
 
@@ -76,66 +77,25 @@ public class ApprovePendingDoctorFragment extends Fragment {
             }
         });
 
-//        fetchData(new FireStoreCallback() {
-//            @Override
-//            public void onCallback(ArrayList<Doctor> doctorList) {
-//
-//                if(!doctorList.isEmpty())
-//                {
-//                    tv_no_pending_doctor.setVisibility(View.GONE);
-//                    lv_approve_pending_doctor.setVisibility(View.VISIBLE);
-//                    lv_approve_pending_doctor.setAdapter(new DoctorListAdapter(doctorList, getContext(), "Approve Doctor"));
-//                }
-//
-//                else
-//                {
-//                    tv_no_pending_doctor.setText("No doctor is pending to be approved..");
-//                    tv_no_pending_doctor.setVisibility(View.VISIBLE);
-//                    lv_approve_pending_doctor.setVisibility(View.GONE);
-//                }
-//
-//            }
-//        });
-
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-//                pendingDoctorList.clear();
-//                fetchData(new FireStoreCallback() {
-//                    @Override
-//                    public void onCallback(ArrayList<Doctor> doctorList) {
-//
-//                        if(!doctorList.isEmpty())
-//                        {
-//                            tv_no_pending_doctor.setVisibility(View.GONE);
-//                            lv_approve_pending_doctor.setVisibility(View.VISIBLE);
-//                            lv_approve_pending_doctor.setAdapter(new DoctorListAdapter(doctorList, getContext(), "Approve Doctor"));
-//                        }
-//
-//                        else
-//                        {
-//                            tv_no_pending_doctor.setText("No doctor is pending to be approved..");
-//                            tv_no_pending_doctor.setVisibility(View.VISIBLE);
-//                            lv_approve_pending_doctor.setVisibility(View.GONE);
-//                        }
-//
-//                    }
-//                });
+                pendingDoctorList.clear();
+                documentNameList.clear();
 
                 pendingDoctorReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful())
                         {
-                            pendingDoctorList.clear();
                             for (DocumentSnapshot documentSnapshot : task.getResult())
                             {
                                 name = documentSnapshot.getString("Name");
                                 email = documentSnapshot.getString("Email");
                                 hospital = documentSnapshot.getString("Hospital");
-
-                                Doctor doctor = new Doctor(name, email, hospital);
+                                documentNameList = (ArrayList<String>)documentSnapshot.get("Document Path");
+                                Doctor doctor = new Doctor(name, email, hospital, documentNameList);
                                 pendingDoctorList.add(doctor);
                             }
 

@@ -1,14 +1,18 @@
 package com.example.foodintoleranceappfyp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,7 @@ public class DoctorProfileFragment extends Fragment {
     String name;
     String userType;
     String collectionName;
+    ArrayList<String> documentNameList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -51,6 +56,7 @@ public class DoctorProfileFragment extends Fragment {
         ImageView imgView_changeDoctorUsername = view.findViewById(R.id.imgView_changeDoctorUsername);
 
         TextView tv_doctorEmailField = view.findViewById(R.id.tv_doctorEmailField);
+        Button btn_view_document = view.findViewById(R.id.btn_view_document);
 
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -78,6 +84,7 @@ public class DoctorProfileFragment extends Fragment {
                                         {
                                             tv_doctorUsernameField.setText(documentSnapshot.getString("Name"));
                                             tv_doctorEmailField.setText(documentSnapshot.getString("Email"));
+                                            documentNameList = (ArrayList<String>)documentSnapshot.get("Document Path");
                                             collectionName = "doctors";
                                         }
                                     }
@@ -99,6 +106,7 @@ public class DoctorProfileFragment extends Fragment {
                                         {
                                             tv_doctorUsernameField.setText(documentSnapshot.getString("Name"));
                                             tv_doctorEmailField.setText(documentSnapshot.getString("Email"));
+                                            documentNameList = (ArrayList<String>)documentSnapshot.get("Document Path");
                                             collectionName = "pendingDoctors";
                                         }
                                     }
@@ -106,60 +114,55 @@ public class DoctorProfileFragment extends Fragment {
                                 }
                             });
                         }
+
                     }
                 }
             }
         });
 
-//        fetchData(new FireStoreCallback() {
-//            @Override
-//            public void onCallback(AppUser user) {
-//
-//                DocumentReference dr;
-//                if(user.getUserType().equals("Doctor"))
-//                {
-//                    dr = fStore.collection("doctors").document(userId);
-//                    dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if(task.isSuccessful())
-//                            {
-//                                DocumentSnapshot documentSnapshot = task.getResult();
-//                                if(documentSnapshot != null)
-//                                {
-//                                    tv_doctorUsernameField.setText(documentSnapshot.getString("Name"));
-//                                    tv_doctorEmailField.setText(documentSnapshot.getString("Email"));
-//                                    collectionName = "doctors";
-//                                }
-//                            }
-//
-//                        }
-//                    });
-//                }
-//
-//                if(user.getUserType().equals("Pending Doctor"))
-//                {
-//                    dr = fStore.collection("pendingDoctors").document(userId);
-//                    dr.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if(task.isSuccessful())
-//                            {
-//                                DocumentSnapshot documentSnapshot = task.getResult();
-//                                if(documentSnapshot != null)
-//                                {
-//                                    tv_doctorUsernameField.setText(documentSnapshot.getString("Name"));
-//                                    tv_doctorEmailField.setText(documentSnapshot.getString("Email"));
-//                                    collectionName = "pendingDoctors";
-//                                }
-//                            }
-//
-//                        }
-//                    });
-//                }
-//
-//            }
-//        });
+        btn_view_document.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                View radioButtonView = v.inflate(getContext(), R.layout.select_document, null);
+                RadioGroup radioGroup_document = radioButtonView.findViewById(R.id.radioGroup_document);
+
+                for (String documentName : documentNameList)
+                {
+                    RadioButton radioButton = new RadioButton(radioButtonView.getContext());
+                    radioButton.setText(documentName.substring(documentName.lastIndexOf("/")+1));
+                    radioButton.setId(documentNameList.indexOf(documentName));
+                    radioButton.setTextSize(15);
+                    radioGroup_document.addView(radioButton);
+                    TextView tv = new TextView(radioButtonView.getContext());
+                    tv.setText(System.getProperty("line.separator"));
+                    radioGroup_document.addView(tv);
+                }
+
+                radioGroup_document.check(0);
+
+                android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(getContext())
+                        .setView(radioButtonView)
+                        .setTitle("View Document")
+                        .setMessage("Please select a document to view")
+                        .setPositiveButton("View", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Intent intent = new Intent(getContext(), PdfViewActivity.class);
+                                intent.putExtra("Document", documentNameList.get(radioGroup_document.getCheckedRadioButtonId()));
+                                startActivity(intent);
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+
+
+            }
+        });
 
         imgView_changeDoctorUsername.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,32 +262,4 @@ public class DoctorProfileFragment extends Fragment {
 
         return view;
     }
-
-//    private interface FireStoreCallback
-//    {
-//        void onCallback(AppUser user);
-//    }
-//
-//    private void fetchData(FireStoreCallback fireStoreCallback)
-//    {
-//
-//        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful())
-//                {
-//                    DocumentSnapshot documentSnapshot = task.getResult();
-//                    if (documentSnapshot != null)
-//                    {
-//                        name = documentSnapshot.getString("Name");
-//                        userType = documentSnapshot.getString("UserType");
-//                        AppUser user = new AppUser(name, userType);
-//
-//                        fireStoreCallback.onCallback(user);
-//
-//                    }
-//                }
-//            }
-//        });
-//    }
 }

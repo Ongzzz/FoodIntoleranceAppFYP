@@ -51,9 +51,9 @@ public class ConsultPatientFragment extends Fragment{
         TextView tv_no_consult_patient = view.findViewById(R.id.tv_no_consult_patient);
         ListView lv_consult_patient = view.findViewById(R.id.lv_consult_patient);
 
-//        tv_no_consult_patient.setText("No patient...");
-//        tv_no_consult_patient.setVisibility(View.VISIBLE);
-//        lv_consult_patient.setVisibility(View.GONE);
+        tv_no_consult_patient.setText("No patient...");
+        tv_no_consult_patient.setVisibility(View.VISIBLE);
+        lv_consult_patient.setVisibility(View.GONE);
 
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -91,12 +91,7 @@ public class ConsultPatientFragment extends Fragment{
                                             lv_consult_patient.setVisibility(View.VISIBLE);
                                             lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
                                         }
-                                        else
-                                        {
-                                            tv_no_consult_patient.setVisibility(View.VISIBLE);
-                                            tv_no_consult_patient.setText("No patient...");
-                                            lv_consult_patient.setVisibility(View.GONE);
-                                        }
+
                                     }
                                 }
                             });
@@ -106,28 +101,14 @@ public class ConsultPatientFragment extends Fragment{
             }
         });
 
-//        fetchData(new FireStoreCallback() {
-//            @Override
-//            public void onCallback(ArrayList<Consultation> consultations) {
-//                if(!consultations.isEmpty())
-//                {
-//                    tv_no_consult_patient.setVisibility(View.GONE);
-//                    lv_consult_patient.setVisibility(View.VISIBLE);
-//                    lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
-//                }
-//
-//                else
-//                {
-//                    tv_no_consult_patient.setText("No patient...");
-//                    tv_no_consult_patient.setVisibility(View.VISIBLE);
-//                    lv_consult_patient.setVisibility(View.GONE);
-//                }
-//            }
-//        });
 
         refreshPatientList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                tv_no_consult_patient.setText("No patient...");
+                tv_no_consult_patient.setVisibility(View.VISIBLE);
+                lv_consult_patient.setVisibility(View.GONE);
 
                 consultations.clear();
                 collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -167,12 +148,6 @@ public class ConsultPatientFragment extends Fragment{
                                                     lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
                                                 }
 
-                                                else
-                                                {
-                                                    tv_no_consult_patient.setText("No patient...");
-                                                    tv_no_consult_patient.setVisibility(View.VISIBLE);
-                                                    lv_consult_patient.setVisibility(View.GONE);
-                                                }
                                             }
                                         }
                                     });
@@ -181,24 +156,7 @@ public class ConsultPatientFragment extends Fragment{
                         }
                     }
                 });
-//                fetchData(new FireStoreCallback() {
-//                    @Override
-//                    public void onCallback(ArrayList<Consultation> consultationList) {
-//                        if(!consultationList.isEmpty())
-//                        {
-//                            tv_no_consult_patient.setVisibility(View.GONE);
-//                            lv_consult_patient.setVisibility(View.VISIBLE);
-//                            lv_consult_patient.setAdapter(new ConsultationListAdapter(consultationList, getContext(), "Consult Patient"));
-//                        }
-//
-//                        else
-//                        {
-//                            tv_no_consult_patient.setText("No patient...");
-//                            tv_no_consult_patient.setVisibility(View.VISIBLE);
-//                            lv_consult_patient.setVisibility(View.GONE);
-//                        }
-//                    }
-//                });
+
                 refreshPatientList.setRefreshing(false);
             }
         });

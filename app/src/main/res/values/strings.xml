@@ -102,6 +102,9 @@
     <string name="updateRecipe">Confirm Changes</string>
     <string name="uploadNewImage">Upload New Image</string>
     <string name="url_information">Only MP4, WEBM, and YouTube video are supported.</string>
+    <string name="pdf">Please attach some supporting document in PDF format</string>
+    <string name="clear">clear</string>
+    <string name="view_document">View Uploaded Document</string>
 
     <string-array name="userType_array">
         <item>Please select a user type</item>

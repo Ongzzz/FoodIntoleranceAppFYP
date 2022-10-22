@@ -94,14 +94,21 @@ public class ConsultationListAdapter extends BaseAdapter implements android.widg
 
             String intolerance = TextUtils.join(", ", arrayList.get(position).getIntolerance());
 
-            String consultationInfo = "Appointment Time: &nbsp; &nbsp; <b>" + arrayList.get(position).getDateTime() +
-                    "<br></b>Patient Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientName() +
-                    "<br></b>Patient Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientEmail() +
-                    "<br></b>Gender: &nbsp; &nbsp; <b>" + arrayList.get(position).getGender() +
-                    "<br></b>State: &nbsp; &nbsp; <b>" + arrayList.get(position).getState() +
-                    "<br></b>Intolerance: &nbsp; &nbsp; <b>" + intolerance;
+//            String consultationInfo = "Appointment Time: &nbsp; &nbsp; <b>" + arrayList.get(position).getDateTime() +
+//                    "<br></b>Patient Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientName() +
+//                    "<br></b>Patient Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientEmail() +
+//                    "<br></b>Gender: &nbsp; &nbsp; <b>" + arrayList.get(position).getGender() +
+//                    "<br></b>State: &nbsp; &nbsp; <b>" + arrayList.get(position).getState() +
+//                    "<br></b>Intolerance: &nbsp; &nbsp; <b>" + intolerance;
 
-            tv_consultationInfo.setText(Html.fromHtml(consultationInfo));
+            String consultationInfo = String.format("%-14s : %s", "Appointment Time", arrayList.get(position).getDateTime())
+                    + System.getProperty("line.separator") + String.format("%-21s : %s", "Patient Name", arrayList.get(position).getPatientName())
+                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Patient Email", arrayList.get(position).getPatientEmail())
+                    + System.getProperty("line.separator") + String.format("%-27s : %s", "Gender", arrayList.get(position).getGender())
+                    + System.getProperty("line.separator") + String.format("%-30s : %s", "State", arrayList.get(position).getState())
+                    + System.getProperty("line.separator") + String.format("%-25s : %s", "Intolerance", intolerance);
+
+            tv_consultationInfo.setText(consultationInfo);
 
             imgView_consultPatient.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -230,13 +237,13 @@ public class ConsultationListAdapter extends BaseAdapter implements android.widg
         {
             imgView_consultPatient.setVisibility(View.GONE);
 
-            String consultationRecord = "Appointment Time: &nbsp; &nbsp; <b>" + arrayList.get(position).getDateTime() +
-                    "<br></b>Patient Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientName() +
-                    "<br></b>Patient Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientEmail() +
-                    "<br></b>Doctor Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getDoctorName() +
-                    "<br></b>Doctor Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getDoctorEmail();
+            String consultationRecord = String.format("%-14s : %s", "Appointment Time", arrayList.get(position).getDateTime())
+                    + System.getProperty("line.separator") + String.format("%-21s : %s", "Patient Name", arrayList.get(position).getPatientName())
+                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Patient Email", arrayList.get(position).getPatientEmail())
+                    + System.getProperty("line.separator") + String.format("%-21s : %s", "Doctor Name", arrayList.get(position).getDoctorName())
+                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Doctor Email", arrayList.get(position).getDoctorEmail());
 
-            tv_consultationInfo.setText(Html.fromHtml(consultationRecord));
+            tv_consultationInfo.setText(consultationRecord);
         }
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();

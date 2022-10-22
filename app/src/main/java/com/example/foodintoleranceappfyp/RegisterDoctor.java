@@ -1,7 +1,9 @@
 package com.example.foodintoleranceappfyp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
@@ -14,9 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -27,7 +31,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -40,15 +50,31 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.documentfile.provider.DocumentFile;
 
 public class RegisterDoctor extends AppCompatActivity {
 
     FirebaseAuth fAuth = FirebaseAuth.getInstance();
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-    CollectionReference collectionReference_pendingDoctors = fStore.collection("pendingDoctors");
-    CollectionReference collectionReference_doctors = fStore.collection("doctors");
+    FirebaseStorage fStorage = FirebaseStorage.getInstance();
+    StorageReference storageReference;
+
+    //Uri path;
+    TextView tv_pdf_file;
+    ArrayList<String> fileNameList = new ArrayList<>();
+    ArrayList<String> storagePath = new ArrayList<>();
+    ArrayList<Uri>pathList = new ArrayList<>();
+    ArrayList<String> temp = new ArrayList<>();
+    int j;
+
+    String userId;
+    boolean uploadSuccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +91,13 @@ public class RegisterDoctor extends AppCompatActivity {
         EditText et_doctorName = findViewById(R.id.et_doctorName);
         EditText et_doctorEmail = findViewById(R.id.et_doctorEmail);
         EditText et_doctorPassword = findViewById(R.id.et_doctorPassword);
-
+        tv_pdf_file = findViewById(R.id.tv_pdf_file);
         Button btn_registerDoctor = findViewById(R.id.btn_registerDoctor);
         ImageView img_showHide = findViewById(R.id.img_showHide);
+        Button btn_upload_doctor_document = findViewById(R.id.btn_upload_doctor_document);
+        Button btn_clear_document = findViewById(R.id.btn_clear_document);
+
+        tv_pdf_file.setText("No file is attached...");
 
         img_showHide.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,8 +168,17 @@ public class RegisterDoctor extends AppCompatActivity {
                     valid = false;
                 }
 
+                if(pathList.isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(), "Please attach supporting document to prove you are a doctor", Toast.LENGTH_SHORT).show();
+                    valid = false;
+                }
+
                 if(valid)
                 {
+
+                    userId = email;
+                    userId = userId.replaceAll("\\s","");
 
                     fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -147,17 +186,57 @@ public class RegisterDoctor extends AppCompatActivity {
 
                             if(task.isSuccessful())
                             {
+                                for (String s : temp)
+                                {
+                                    storagePath.add(s.replace("doctorID", userId));
+                                }
+
                                 Map<String,Object> user = new HashMap<>();
                                 user.put("Name",name);
-                                user.put("Email",email);
+                                user.put("Email",userId);
                                 user.put("Hospital",hospital);
+                                user.put("Document Path", storagePath);
 
-                                String userId = email;
-                                userId = userId.replaceAll("\\s","");
                                 DocumentReference documentReference = fStore.collection("pendingDoctors").document(userId);
                                 documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+
+                                        uploadSuccess = true;
+                                        for(j=0; j<pathList.size(); j++)
+                                        {
+                                            storageReference = fStorage.getReference("documents/doctors/"+userId+"/"+fileNameList.get(j));
+
+                                            if(uploadSuccess)
+                                            {
+                                                storageReference.putFile(pathList.get(j)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(RegisterDoctor.this,"Failed to upload "+fileNameList.get(j), Toast.LENGTH_SHORT).show();
+                                                        uploadSuccess = false;
+                                                    }
+                                                });
+                                            }
+                                            else
+                                            {
+                                                storageReference = fStorage.getReference("documents/doctors/"+userId);
+                                                storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                                                    @Override
+                                                    public void onSuccess(ListResult listResult) {
+                                                        for (StorageReference singleFileReference : listResult.getItems())
+                                                        {
+                                                            singleFileReference.delete();
+                                                        }
+                                                    }
+                                                });
+                                                break;
+                                            }
+                                        }
 
                                         String senderEmail="foodintoleranceapp53@gmail.com";
                                         String senderPassword="lkqgijyawiwshwjc";
@@ -188,11 +267,11 @@ public class RegisterDoctor extends AppCompatActivity {
                                     }
                                 });
 
-                                DocumentReference documentReference2 = fStore.collection("users").document(userId);
+                                DocumentReference userReference = fStore.collection("users").document(userId);
                                 Map<String,Object> user2 = new HashMap<>();
                                 user2.put("Name",name);
                                 user2.put("UserType","Pending Doctor");
-                                documentReference2.set(user2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                userReference.set(user2).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
@@ -213,12 +292,70 @@ public class RegisterDoctor extends AppCompatActivity {
 
                     });
 
+
+
                 }
 
+            }
+        });
+
+        btn_clear_document.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pathList.isEmpty())
+                {
+                    Toast.makeText(RegisterDoctor.this, "No file is attached", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    tv_pdf_file.setText(getResources().getString(R.string.pdf));
+                    pathList.clear();
+                    fileNameList.clear();
+                    temp.clear();
+                }
+            }
+        });
+
+        btn_upload_doctor_document.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.setType("application/pdf");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                activityResultLauncher.launch(intent);
             }
         });
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
     }
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        pathList.add(data.getData());
+                        DocumentFile file = DocumentFile.fromSingleUri(getApplicationContext(), pathList.get(pathList.size()-1));
+
+                        if(!fileNameList.isEmpty())
+                        {
+                            tv_pdf_file.setText(tv_pdf_file.getText().toString()
+                                    + System.getProperty("line.separator")
+                                    + file.getName());
+                        }
+                        else
+                        {
+                            tv_pdf_file.setText(file.getName());
+                        }
+
+                        fileNameList.add(file.getName());
+                        temp.add("documents/doctors/doctorID/"+file.getName());
+
+                    }
+                }
+            });
 }

@@ -92,11 +92,11 @@ public class AppointmentListAdapter extends BaseAdapter implements android.widge
         String doctorEmail = arrayList.get(position).getDoctorEmail();
         String dateTime = arrayList.get(position).getDateTime();
 
-        String appointmentInfo = "Patient Name: &nbsp; &nbsp; <b>" + patientName+
-                "<br></b>Patient Email: &nbsp; &nbsp; <b>" + patientEmail +
-                "<br></b>Datetime: &nbsp; &nbsp; <b>" + dateTime;
+        String appointmentInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getPatientName())
+                + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getPatientEmail())
+                + System.getProperty("line.separator") + String.format("%-19s : %s", "Datetime", dateTime);
 
-        tv_appointmentInfo.setText(Html.fromHtml(appointmentInfo));
+        tv_appointmentInfo.setText(appointmentInfo);
 
         if(fragmentName.equals("My Appointment"))
         {

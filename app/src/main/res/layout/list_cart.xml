@@ -12,54 +12,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_food_image_title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/foodImage"-->
-<!--        android:layout_marginTop="75dp"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:gravity="center"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="15dp"-->
-<!--        android:textColor="@color/black"/>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_food_name_title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/foodName"-->
-<!--        android:layout_marginTop="75dp"-->
-<!--        android:layout_marginLeft="120dp"-->
-<!--        android:gravity="center"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="15dp"-->
-<!--        android:textColor="@color/black"/>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_food_price_title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/foodPriceTitle"-->
-<!--        android:layout_marginTop="75dp"-->
-<!--        android:layout_marginLeft="220dp"-->
-<!--        android:gravity="center"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="15dp"-->
-<!--        android:textColor="@color/black"/>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_food_quantity_title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/foodQuantity"-->
-<!--        android:layout_marginTop="75dp"-->
-<!--        android:layout_marginLeft="320dp"-->
-<!--        android:gravity="center"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="15dp"-->
-<!--        android:textColor="@color/black"/>-->
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -173,17 +125,6 @@
         android:backgroundTint="@color/unfocused"
         android:layout_marginTop="530dp"
         android:layout_centerHorizontal="true" />
-
-<!--    <com.paypal.checkout.paymentbutton.PayPalButton-->
-<!--        android:id="@+id/btn_payment"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:paypal_color="blue"-->
-<!--        app:payment_button_shape="rounded"-->
-<!--        app:payment_button_size="medium"-->
-<!--        app:paypal_label="pay"-->
-<!--        android:layout_marginTop="530dp"-->
-<!--        android:layout_centerHorizontal="true" />-->
 
 </RelativeLayout>
 

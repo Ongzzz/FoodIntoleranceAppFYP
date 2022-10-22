@@ -1,5 +1,8 @@
 package com.example.foodintoleranceappfyp;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -45,7 +48,6 @@ public class RestaurantLocationTab extends Fragment {
 
     LatLng restaurantLocation;
     Address l;
-
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -143,8 +145,7 @@ public class RestaurantLocationTab extends Fragment {
             btn_getDirection.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(getContext(),"hello",Toast.LENGTH_SHORT).show();
-                    //Uri gmmIntentUri = Uri.parse("geo:0,0?q="+restaurant.getRestaurantAddress());
+
                     Uri gmmIntentUri = Uri.parse("google.navigation:q="+l.getLatitude()+","+l.getLongitude());
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
@@ -158,7 +159,9 @@ public class RestaurantLocationTab extends Fragment {
     }
 
 
-//
+
+
+    //
 //    @Override
 //    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 //        super.onViewCreated(view, savedInstanceState);

@@ -106,9 +106,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         if(!sameDay)
                         {
-                            if(documentSnapshot.getLong("Year").intValue() < currentYear ||
-                                    documentSnapshot.getLong("Month").intValue() < currentMonth ||
-                                    documentSnapshot.getLong("Day").intValue() < currentDay)
+//                            if(documentSnapshot.getLong("Year").intValue() < currentYear &&
+//                                    documentSnapshot.getLong("Month").intValue() < currentMonth &&
+//                                    documentSnapshot.getLong("Day").intValue() < currentDay)
+//                            {
+//                                past = true;
+//                            }
+                            if((documentSnapshot.getLong("Year").intValue() < currentYear) ||
+                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
+                                documentSnapshot.getLong("Month").intValue() < currentMonth) ||
+                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
+                                documentSnapshot.getLong("Month").intValue() == currentMonth &&
+                                documentSnapshot.getLong("Day").intValue() < currentDay))
                             {
                                 past = true;
                             }
@@ -386,6 +395,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed()
     {
+
         if(drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
@@ -431,6 +441,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         myRestaurantFragment).commit();
+            }
+            else if(fragment instanceof RestaurantLocationTab)
+            {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new PatientOrderHistoryFragment()).commit();
             }
 
             else

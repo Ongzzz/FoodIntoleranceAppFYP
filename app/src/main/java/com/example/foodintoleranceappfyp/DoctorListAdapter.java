@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -11,14 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +48,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 public class DoctorListAdapter extends BaseAdapter implements android.widget.ListAdapter {
 
@@ -75,29 +92,71 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
 
         TextView tv_doctorInfo = convertView.findViewById(R.id.tv_doctorInfo);
         ImageView imgView_managePendingDoctor = convertView.findViewById(R.id.imgView_managePendingDoctor);
+        ImageView imgView_viewDocument = convertView.findViewById(R.id.imgView_viewDocument);
 
-        if(fragmentName.equals("Approve Doctor"))
-        {
-            String doctorInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getName())
-                    + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getEmail())
-                    + System.getProperty("line.separator") + String.format("%-20s : %s", "Hospital", arrayList.get(position).getHospital());
+        String doctorInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getName())
+                + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getEmail())
+                + System.getProperty("line.separator") + String.format("%-20s : %s", "Hospital", arrayList.get(position).getHospital());
 
-            tv_doctorInfo.setText(doctorInfo);
-        }
+        tv_doctorInfo.setText(doctorInfo);
 
         if(fragmentName.equals("Doctor List"))
         {
-//            String doctorInfo = "Doctor Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getName() +
-//                    "<br></b>Doctor Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getEmail() +
-//                    "<br></b>Hospital: &nbsp; &nbsp; <b>" + arrayList.get(position).getHospital();
+            imgView_managePendingDoctor.setVisibility(View.GONE);
+            imgView_viewDocument.setVisibility(View.GONE);
+        }
 
-            String doctorInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getName())
-                    + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getEmail())
-                    + System.getProperty("line.separator") + String.format("%-20s : %s", "Hospital", arrayList.get(position).getHospital());
-
-            tv_doctorInfo.setText(doctorInfo);
+        if(fragmentName.equals("Admin Doctor List"))
+        {
             imgView_managePendingDoctor.setVisibility(View.GONE);
         }
+
+
+        imgView_viewDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //MainActivity activity = (MainActivity) context;
+
+                View radioButtonView = v.inflate(context, R.layout.select_document, null);
+                RadioGroup radioGroup_document = radioButtonView.findViewById(R.id.radioGroup_document);
+
+                for (String documentName : arrayList.get(position).getDocumentNameList())
+                {
+                    RadioButton radioButton = new RadioButton(radioButtonView.getContext());
+                    radioButton.setText(documentName.substring(documentName.lastIndexOf("/")+1));
+                    radioButton.setId(arrayList.get(position).getDocumentNameList().indexOf(documentName));
+                    radioButton.setTextSize(15);
+                    radioGroup_document.addView(radioButton);
+                    TextView tv = new TextView(radioButtonView.getContext());
+                    tv.setText(System.getProperty("line.separator"));
+                    radioGroup_document.addView(tv);
+                }
+
+                radioGroup_document.check(0);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(context)
+                        .setView(radioButtonView)
+                        .setTitle("View Document")
+                        .setMessage("Please select a document to view")
+                        .setPositiveButton("View", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Intent intent = new Intent(context, PdfViewActivity.class);
+                                intent.putExtra("Document", arrayList.get(position).getDocumentNameList().get(radioGroup_document.getCheckedRadioButtonId()));
+                                context.startActivity(intent);
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+
+
+            }
+        });
 
         imgView_managePendingDoctor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,4 +243,5 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
         StrictMode.setThreadPolicy(policy);
         return convertView;
     }
+
 }

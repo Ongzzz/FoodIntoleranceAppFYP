@@ -104,6 +104,51 @@
         android:ems="10"
         android:spinnerMode="dialog"/>
 
+    <TextView
+        android:id="@+id/tv_pdf_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pdf"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/spinner_hospital"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_hospital"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_hospital"
+        app:layout_constraintBottom_toTopOf="@+id/btn_upload_doctor_document"/>
+
+    <Button
+        android:id="@+id/btn_upload_doctor_document"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/unfocused"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/select"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/btn_clear_document"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_clear_document"
+        app:layout_constraintStart_toStartOf="@+id/tv_pdf_file"
+        app:layout_constraintEnd_toEndOf="@+id/tv_pdf_file"/>
+
+    <Button
+        android:id="@+id/btn_clear_document"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/unfocused"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/clear"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pdf_file"
+        app:layout_constraintBottom_toTopOf="@+id/btn_registerDoctor"
+        app:layout_constraintStart_toEndOf="@+id/btn_upload_doctor_document"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <Button
         android:id="@+id/btn_registerDoctor"
         android:layout_width="wrap_content"
@@ -118,6 +163,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_hospital" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_upload_doctor_document" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

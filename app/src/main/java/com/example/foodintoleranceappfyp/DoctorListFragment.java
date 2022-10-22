@@ -1,5 +1,6 @@
 package com.example.foodintoleranceappfyp;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,11 +29,13 @@ public class DoctorListFragment extends Fragment {
     String userId = fAuth.getCurrentUser().getEmail();
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     CollectionReference collectionReference = fStore.collection("doctors");
+    DocumentReference userReference = fStore.collection("users").document(userId);
 
     ArrayList<Doctor> doctors = new ArrayList<>();
     String name;
     String email;
     String hospital;
+    ArrayList<String> documentNameList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -52,14 +56,31 @@ public class DoctorListFragment extends Fragment {
                         name = documentSnapshot.getString("Name");
                         email = documentSnapshot.getString("Email");
                         hospital = documentSnapshot.getString("Hospital");
-                        doctors.add(new Doctor(name, email, hospital));
+                        documentNameList = (ArrayList<String>)documentSnapshot.get("Document Path");
+                        doctors.add(new Doctor(name, email, hospital, documentNameList));
                     }
 
                     if(!doctors.isEmpty())
                     {
                         tv_no_doctor.setVisibility(View.GONE);
                         lv_doctor_list.setVisibility(View.VISIBLE);
-                        lv_doctor_list.setAdapter(new DoctorListAdapter(doctors, getContext(), "Doctor List"));
+                        userReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if(task.isSuccessful())
+                                {
+                                    DocumentSnapshot documentSnapshot = task.getResult();
+                                    if(documentSnapshot.getString("UserType").equals("Admin"))
+                                    {
+                                        lv_doctor_list.setAdapter(new DoctorListAdapter(doctors, getContext(), "Admin Doctor List"));
+                                    }
+                                    else
+                                    {
+                                        lv_doctor_list.setAdapter(new DoctorListAdapter(doctors, getContext(), "Doctor List"));
+                                    }
+                                }
+                            }
+                        });
                     }
 
                     else
