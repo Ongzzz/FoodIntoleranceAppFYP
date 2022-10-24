@@ -97,8 +97,6 @@ public class RegisterDoctor extends AppCompatActivity {
         Button btn_upload_doctor_document = findViewById(R.id.btn_upload_doctor_document);
         Button btn_clear_document = findViewById(R.id.btn_clear_document);
 
-        tv_pdf_file.setText("No file is attached...");
-
         img_showHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +177,10 @@ public class RegisterDoctor extends AppCompatActivity {
 
                     userId = email;
                     userId = userId.replaceAll("\\s","");
+
+                    ProgressDialog progressDialog = new ProgressDialog(RegisterDoctor.this);
+                    progressDialog.setMessage("Creating your account...");
+                    progressDialog.show();
 
                     fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -278,15 +280,27 @@ public class RegisterDoctor extends AppCompatActivity {
                                     }
                                 });
 
+                                if(progressDialog.isShowing())
+                                {
+                                    progressDialog.dismiss();
+                                }
+
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(i);
                             }
                             else
                             {
+
+                                if(progressDialog.isShowing())
+                                {
+                                    progressDialog.dismiss();
+                                }
+
                                 if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                     Toast.makeText(getApplicationContext(), "The email is used by another user", Toast.LENGTH_SHORT).show();
                                 }
                             }
+
 
                         }
 

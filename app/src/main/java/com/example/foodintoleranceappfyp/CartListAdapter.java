@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dropbox.core.util.StringUtil;
 import com.gkash.gkashandroidsdk.GkashPayment;
 import com.gkash.gkashandroidsdk.PaymentRequest;
 import com.gkash.gkashandroidsdk.PaymentResponse;
@@ -116,7 +117,6 @@ public class CartListAdapter extends BaseAdapter implements android.widget.ListA
         ImageView imgView_increase_quantity = convertView.findViewById(R.id.imgView_increase_quantity);
         ImageView imgView_delete = convertView.findViewById(R.id.imgView_delete);
         Button btn_payment = convertView.findViewById(R.id.btn_payment);
-        //PayPalButton payPalButton = convertView.findViewById(R.id.btn_payment);
         TextView tv_total_price = convertView.findViewById(R.id.tv_total_price);
 
         tv_food_name.setText(cart.getFood().get(position).getName());
@@ -125,43 +125,98 @@ public class CartListAdapter extends BaseAdapter implements android.widget.ListA
 
         tv_restaurant_name.setVisibility(View.GONE);
         btn_payment.setVisibility(View.GONE);
-        //payPalButton.setVisibility(View.GONE);
         tv_total_price.setVisibility(View.GONE);
-
-//        if(position == 0)
-//        {
-//            tv_restaurant_name.setVisibility(View.VISIBLE);
-//            tv_restaurant_name.setText("Purchased from: "+cart.getFood().get(0).getRestaurantName());
-//        }
-
-
 
         if(position == cart.getFood().size() - 1)
         {
             tv_restaurant_name.setVisibility(View.VISIBLE);
             tv_restaurant_name.setText("Purchased from: "+restaurant.getRestaurantName());
             btn_payment.setVisibility(View.VISIBLE);
-            //payPalButton.setVisibility(View.VISIBLE);
             tv_total_price.setVisibility(View.VISIBLE);
 
-            summary = "Name" + String.format("%20s", "Quantity")
-                    + String.format("%20s", "Single Price")
-                    + String.format("%20s", "Total Price") + System.getProperty("line.separator")
+            summary = String.format("%10s", "Name") + String.format("%25s", "Quantity")
+                    + String.format("%25s", "Single Price")
+                    + String.format("%25s", "Total Price") + System.getProperty("line.separator")
                     + System.getProperty("line.separator") + System.getProperty("line.separator");
             totalPrice = 0;
 
             for(int i =0; i<cart.getFood().size();i++)
             {
+                singleItem = "";
                 singleItemTotalPrice = cart.getFood().get(i).getPrice() * cart.getFood().get(i).getQuantity();
                 totalPrice += singleItemTotalPrice;
-                singleItem = String.format("%5s",cart.getFood().get(i).getName()) + String.format("%20s", cart.getFood().get(i).getQuantity())
-                        + String.format("%20s", "RM") + String.format("%-18.2f %s", cart.getFood().get(i).getPrice(),"RM")
-                        + String.format("%.2f", singleItemTotalPrice)
-                        + System.getProperty("line.separator") + System.getProperty("line.separator");
+
+                String name;
+                name = cart.getFood().get(i).getName();
+                ArrayList<String> splitText = new ArrayList<>();
+                int length = name.length();
+                int startIndex = 0;
+                int endIndex = 0;
+                int index;
+
+                if(name.length()>15)
+                {
+                    String newLine;
+                    String temp;
+                    splitText.clear();
+                    while(length!=endIndex+1)
+                    {
+                        endIndex=startIndex+15;
+                        if(endIndex>length-1)
+                        {
+                            endIndex = length-1;
+                            temp =  name.substring(startIndex);
+                        }
+                        else
+                        {
+                            temp =  name.substring(startIndex, endIndex);
+                        }
+                        index = temp.lastIndexOf(" ");
+
+                        if(index!=-1)
+                        {
+                            if(endIndex-startIndex>=15)
+                            {
+                                newLine = temp.substring(0, index).trim()+ System.getProperty("line.separator");
+                                startIndex = startIndex + index;
+                            }
+                            else
+                            {
+                                newLine = temp.trim();
+                                startIndex = endIndex;
+                            }
+                            splitText.add(newLine);
+                        }
+                        else
+                        {
+                            splitText.add(temp);
+                            startIndex=endIndex;
+                        }
+
+                    }
+                    for (String text : splitText)
+                    {
+                        singleItem += String.format("%s", text);
+                    }
+                    singleItem += String.format("%12s",cart.getFood().get(i).getQuantity())
+                            + String.format("%22s", "RM") + String.format("%-21.2f %s", cart.getFood().get(i).getPrice(),"RM")
+                            + String.format("%.2f", singleItemTotalPrice)
+                            + System.getProperty("line.separator") + System.getProperty("line.separator") ;
+
+                }
+                else
+                {
+                    singleItem = String.format("%s", cart.getFood().get(i).getName()) + String.format("%12s", cart.getFood().get(i).getQuantity())
+                            + String.format("%22s", "RM") + String.format("%-21.2f %s", cart.getFood().get(i).getPrice(),"RM")
+                            + String.format("%.2f", singleItemTotalPrice)
+                            + System.getProperty("line.separator") + System.getProperty("line.separator");
+                }
+
                 summary += singleItem;
             }
-            summary += System.getProperty("line.separator") + String.format("%81s", "RM")+String.format("%.2f", totalPrice);
+            summary += System.getProperty("line.separator") + String.format("%100s", "RM")+String.format("%.2f", totalPrice);
             tv_total_price.setText(summary);
+            tv_total_price.setTextSize(13);
         }
 
         if(!cart.getFood().get(position).getImagePath().isEmpty())

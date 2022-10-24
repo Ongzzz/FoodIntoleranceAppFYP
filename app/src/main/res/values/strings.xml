@@ -102,9 +102,13 @@
     <string name="updateRecipe">Confirm Changes</string>
     <string name="uploadNewImage">Upload New Image</string>
     <string name="url_information">Only MP4, WEBM, and YouTube video are supported.</string>
-    <string name="pdf">Please attach some supporting document in PDF format</string>
+    <string name="pdf">Please attach supporting document in PDF format to prove you are a doctor</string>
     <string name="clear">clear</string>
     <string name="view_document">View Uploaded Document</string>
+    <string name="cart_summary">Cart Summary</string>
+    <string name="approved_appointment">Approved Appointment</string>
+    <string name="pending_appointment">Pending Appointment</string>
+    <string name="completed_appointment">Completed Appointment</string>
 
     <string-array name="userType_array">
         <item>Please select a user type</item>

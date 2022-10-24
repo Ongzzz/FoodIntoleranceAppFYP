@@ -92,21 +92,26 @@ public class AppointmentListAdapter extends BaseAdapter implements android.widge
         String doctorEmail = arrayList.get(position).getDoctorEmail();
         String dateTime = arrayList.get(position).getDateTime();
 
-        String appointmentInfo = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getPatientName())
-                + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getPatientEmail())
-                + System.getProperty("line.separator") + String.format("%-19s : %s", "Datetime", dateTime);
-
-        tv_appointmentInfo.setText(appointmentInfo);
-
         if(fragmentName.equals("My Appointment"))
         {
-            //imgView_manageAppointment.setVisibility(View.GONE);
-            imgView_manageAppointment.setVisibility(View.VISIBLE);
+            imgView_manageAppointment.setVisibility(View.GONE);
+
+            String appointmentInfo = String.format("%-14s : %s", "Doctor Name", doctorName)
+                    + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", doctorEmail)
+                    + System.getProperty("line.separator") + String.format("%-19s : %s", "Appointment Time", dateTime);
+
+            tv_appointmentInfo.setText(appointmentInfo);
         }
 
         if(fragmentName.equals("Manage Appointment"))
         {
             imgView_manageAppointment.setVisibility(View.VISIBLE);
+
+            String appointmentInfo = String.format("%-14s : %s", "Patient Name", patientName)
+                    + System.getProperty("line.separator") + String.format("%-16s : %s", "Patient Email", patientEmail)
+                    + System.getProperty("line.separator") + String.format("%-19s : %s", "Appointment Time", dateTime);
+
+            tv_appointmentInfo.setText(appointmentInfo);
         }
 
         DocumentReference appointmentReference = fStore.collection("appointments").document(dateTime+patientEmail+doctorEmail);

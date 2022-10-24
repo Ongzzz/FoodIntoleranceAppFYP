@@ -55,6 +55,9 @@ public class ConsultationListAdapter extends BaseAdapter implements android.widg
 
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
 
+    FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    String userId = fAuth.getCurrentUser().getEmail();
+
     public ConsultationListAdapter(ArrayList<Consultation> arrayList, Context context, String fragmentName) {
         this.arrayList = arrayList;
         this.context = context;
@@ -237,11 +240,20 @@ public class ConsultationListAdapter extends BaseAdapter implements android.widg
         {
             imgView_consultPatient.setVisibility(View.GONE);
 
-            String consultationRecord = String.format("%-14s : %s", "Appointment Time", arrayList.get(position).getDateTime())
-                    + System.getProperty("line.separator") + String.format("%-21s : %s", "Patient Name", arrayList.get(position).getPatientName())
-                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Patient Email", arrayList.get(position).getPatientEmail())
-                    + System.getProperty("line.separator") + String.format("%-21s : %s", "Doctor Name", arrayList.get(position).getDoctorName())
-                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Doctor Email", arrayList.get(position).getDoctorEmail());
+            String consultationRecord;
+
+            if(userId.equals(arrayList.get(position).getPatientName()))
+            {
+                consultationRecord = String.format("%-14s : %s", "Doctor Name", arrayList.get(position).getDoctorName())
+                        + System.getProperty("line.separator") + String.format("%-16s : %s", "Doctor Email", arrayList.get(position).getDoctorEmail())
+                        + System.getProperty("line.separator") + String.format("%-19s : %s", "Appointment Time", arrayList.get(position).getDateTime());
+            }
+            else
+            {
+                consultationRecord = String.format("%-14s : %s", "Patient Name", arrayList.get(position).getPatientName())
+                        + System.getProperty("line.separator") + String.format("%-16s : %s", "Patient Email", arrayList.get(position).getPatientEmail())
+                        + System.getProperty("line.separator") + String.format("%-19s : %s", "Appointment Time", arrayList.get(position).getDateTime());
+            }
 
             tv_consultationInfo.setText(consultationRecord);
         }

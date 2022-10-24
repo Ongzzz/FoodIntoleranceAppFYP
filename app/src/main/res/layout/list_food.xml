@@ -46,28 +46,42 @@
 
         <TextView
             android:id="@+id/tv_food_name"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:text="@string/foodName"
             android:layout_gravity="left|bottom"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="25dp"
             android:textStyle="bold"
-            android:textSize="15dp"
+            android:textSize="12dp"
             android:textColor="@color/black"/>
 
         <TextView
-            android:id="@+id/tv_food_description"
-            android:layout_width="140dp"
-            android:layout_height="90dp"
+            android:id="@+id/tv_food_intolerance"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textAlignment="center"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="30dp"
             android:text="@string/foodDescription"
-            android:textSize="15dp"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:textColor="@color/gph_dark_red"/>
+
+        <TextView
+            android:id="@+id/tv_food_description"
+            android:layout_width="140dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="70dp"
+            android:text="@string/foodDescription"
+            android:textSize="12dp"
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
@@ -77,11 +91,10 @@
             android:layout_height="wrap_content"
             android:text="@string/foodPrice"
             android:layout_gravity="right"
-            android:layout_marginTop="140dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="155dp"
             android:layout_marginRight="50dp"
             android:textStyle="bold"
-            android:textSize="15dp"
+            android:textSize="13dp"
             android:textColor="@color/black"/>
 
         <ImageView
@@ -91,7 +104,7 @@
             android:src="@drawable/ic_minus"
             android:layout_gravity="center|bottom"
             android:layout_marginTop="170dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="40dp"/>
 
         <TextView
             android:id="@+id/tv_food_quantity"
@@ -99,10 +112,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:text="1"
-            android:textSize="18dp"
+            android:textSize="14dp"
             android:textStyle="bold"
             android:layout_marginTop="170dp"
-            android:layout_marginLeft="35dp"
+            android:layout_marginLeft="65dp"
             android:textColor="@color/black"/>
 
         <ImageView
@@ -112,16 +125,16 @@
             android:src="@drawable/ic_add"
             android:layout_gravity="center|bottom"
             android:layout_marginTop="170dp"
-            android:layout_marginLeft="60dp"/>
+            android:layout_marginLeft="90dp"/>
 
         <ImageView
             android:id="@+id/imgView_add_to_cart"
-            android:layout_width="30dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:src="@drawable/ic_cart"
             android:layout_gravity="right|bottom"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="170dp"
-            android:layout_marginRight="20dp"/>
+            android:src="@drawable/ic_cart" />
 
         <TextView
             android:id="@+id/tv_food_availability"

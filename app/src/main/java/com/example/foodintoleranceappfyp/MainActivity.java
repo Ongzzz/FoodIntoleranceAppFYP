@@ -373,6 +373,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ConsultationRecordFragment()).commit();
                 break;
 
+            case R.id.nav_appointment_consultation_record:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new AppointmentConsultationTab()).commit();
+                break;
+
             case R.id.nav_AIDoctor:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AIDoctorFragment()).commit();

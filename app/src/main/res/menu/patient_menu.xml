@@ -35,9 +35,9 @@
             android:title="Make Appointment" />
 
         <item
-            android:id="@+id/nav_consultationRecord"
+            android:id="@+id/nav_appointment_consultation_record"
             android:icon="@drawable/ic_record"
-            android:title="My Consultation Records" />
+            android:title="Appointment and Consultation"/>
 
         <item
             android:id="@+id/nav_AIDoctor"

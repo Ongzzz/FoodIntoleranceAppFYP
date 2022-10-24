@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class MakeAppointmentFragment extends Fragment {
 
@@ -260,6 +270,32 @@ public class MakeAppointmentFragment extends Fragment {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     Toast.makeText(getContext(), "The appointment is made successfully", Toast.LENGTH_SHORT).show();
+
+                                                                    String senderEmail="foodintoleranceapp53@gmail.com";
+                                                                    String senderPassword="lkqgijyawiwshwjc";
+                                                                    String messageToSend="You receive a video consultation request from a patient.";
+                                                                    Properties props = new Properties();
+                                                                    props.put("mail.smtp.auth","true");
+                                                                    props.put("mail.smtp.starttls.enable","true");
+                                                                    props.put("mail.smtp.host","smtp.gmail.com");
+                                                                    props.put("mail.smtp.port","587");
+                                                                    Session session = Session.getInstance(props, new javax.mail.Authenticator(){
+                                                                        @Override
+                                                                        protected PasswordAuthentication getPasswordAuthentication() {
+                                                                            return new PasswordAuthentication(senderEmail,senderPassword);
+                                                                        }
+                                                                    });
+
+                                                                    try {
+                                                                        javax.mail.Message message = new MimeMessage(session);
+                                                                        message.setFrom(new InternetAddress(senderEmail));
+                                                                        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(doctorEmail));
+                                                                        message.setSubject("Video Consultation Request");
+                                                                        message.setText(messageToSend);
+                                                                        Transport.send(message);
+                                                                    }catch (MessagingException e){
+                                                                        throw new RuntimeException(e);
+                                                                    }
                                                                 }
                                                             });
                                                         }
@@ -280,6 +316,8 @@ public class MakeAppointmentFragment extends Fragment {
             }
         });
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         return view;
     }
 }

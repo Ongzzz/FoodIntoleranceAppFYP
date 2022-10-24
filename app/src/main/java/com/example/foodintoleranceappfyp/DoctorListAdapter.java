@@ -219,6 +219,7 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
                                     throw new RuntimeException(e);
                                 }
 
+                                Toast.makeText(context, arrayList.get(position).getName() + " is approved", Toast.LENGTH_SHORT).show();
                                 arrayList.remove(position);
                                 notifyDataSetChanged();
 
@@ -229,6 +230,8 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
 
                                 DocumentReference removePendingDoctor = fStore.collection("pendingDoctors").document(arrayList.get(position).getEmail());
                                 removePendingDoctor.delete();
+
+                                Toast.makeText(context, arrayList.get(position).getName() + " is rejected", Toast.LENGTH_SHORT).show();
 
                                 arrayList.remove(position);
                                 notifyDataSetChanged();

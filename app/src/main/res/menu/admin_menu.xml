@@ -44,11 +44,6 @@
             android:icon="@drawable/ic_record"
             android:title="All Consultation Records" />
 
-
-
-
-
-
     </group>
 
     <item android:title="Others">

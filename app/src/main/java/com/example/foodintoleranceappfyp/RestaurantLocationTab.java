@@ -41,13 +41,10 @@ public class RestaurantLocationTab extends Fragment {
 
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
-    private static final int REQUEST_CODE = 101;
-
-
-    GoogleMap map;
 
     LatLng restaurantLocation;
     Address l;
+    Bundle bundle = new Bundle();
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -68,9 +65,11 @@ public class RestaurantLocationTab extends Fragment {
             }
 
             LatLng myLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(myLocation));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 5));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+            LatLng center = new LatLng((myLocation.latitude+restaurantLocation.latitude)/2, (myLocation.longitude+restaurantLocation.longitude)/2);
+            //googleMap.animateCamera(CameraUpdateFactory.newLatLng(center));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+            //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 14f));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(14f));
             googleMap.addMarker(new MarkerOptions().position(myLocation).title("I am here"));
             googleMap.addMarker(new MarkerOptions().position(restaurantLocation).title("restaurant is here"));
 
@@ -85,18 +84,18 @@ public class RestaurantLocationTab extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant_location_tab, container, false);
         Button btn_getDirection = view.findViewById(R.id.btn_getDirection);
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        bundle = this.getArguments();
 
-        Bundle bundle = this.getArguments();
-        if(bundle!=null)
+        if (ActivityCompat.checkSelfPermission(
+                getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            Restaurant restaurant = (Restaurant)bundle.getSerializable("Restaurant");
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        else
+        {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-            if (ActivityCompat.checkSelfPermission(
-                    getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            }
+            Restaurant restaurant = (Restaurant)bundle.getSerializable("Restaurant");
 
             Task<Location> task = fusedLocationProviderClient.getLastLocation();
             task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -155,71 +154,28 @@ public class RestaurantLocationTab extends Fragment {
         }
 
 
+
+
         return view;
+
+
     }
 
+    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if(result)
+                    {
+                        RestaurantLocationTab restaurantLocationTab = new RestaurantLocationTab();
+                        restaurantLocationTab.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                restaurantLocationTab).commit();
+                    }
 
-
-
-    //
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        if (ActivityCompat.checkSelfPermission(
-//                getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-//        {
-//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-//            super.onPause();
-//        }
-//        super.onResume();
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-//        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-//        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-//            @Override
-//            public void onSuccess(Location location) {
-//                if (location != null)
-//                {
-//                    currentLocation = location;
-//                    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-//                    if (mapFragment != null)
-//                    {
-//                        mapFragment.getMapAsync(callback);
-//                    }
-//                }
-//
-//            }
-//        });
-//
-//
-//
-//
-//
-//    }
-
-//    private void requestPermission() {
-//
-//        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-//    }
-//
-//
-//    private ActivityResultLauncher<String> requestPermissionLauncher =
-//            registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-//                @Override
-//                public void onActivityResult(Boolean result) {
-//                    if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION))
-//                    {
-//                        Toast.makeText(getActivity(), "We need the location permission to get your current location! Please turn on the location permission in the setting", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    else if(!result)
-//                    {
-//                        Toast.makeText(getActivity(), "We need the location permission to get your current location!", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                }
-//
-//            });
-//
+                }
+            }
+    );
 
 }

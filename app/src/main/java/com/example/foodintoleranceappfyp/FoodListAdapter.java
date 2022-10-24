@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +102,7 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
 
         TextView tv_pending_restaurant_name = convertView.findViewById(R.id.tv_pending_restaurant_name);
         TextView tv_food_name = convertView.findViewById(R.id.tv_food_name);
+        TextView tv_food_intolerance = convertView.findViewById(R.id.tv_food_intolerance);
         TextView tv_food_description = convertView.findViewById(R.id.tv_food_description);
         TextView tv_food_price = convertView.findViewById(R.id.tv_food_price);
         TextView tv_food_quantity = convertView.findViewById(R.id.tv_food_quantity);
@@ -112,6 +115,16 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
         ImageView imgView_add_food = convertView.findViewById(R.id.imgView_add_food);
 
         tv_food_name.setText(arrayList.get(position).getName());
+
+        if(arrayList.get(position).getIntolerance().isEmpty())
+        {
+            tv_food_intolerance.setText("No gluten, lactose and fructose");
+        }
+        else
+        {
+            String intolerance = TextUtils.join(", ", arrayList.get(position).getIntolerance());
+            tv_food_intolerance.setText(intolerance);
+        }
         tv_food_description.setText(arrayList.get(position).getDescription());
         //tv_food_price.setText("RM"+String.valueOf(arrayList.get(position).getPrice()));
         tv_food_price.setText("RM"+String.format("%.2f",arrayList.get(position).getPrice()));
@@ -149,18 +162,22 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
             tv_pending_restaurant_name.setVisibility(View.GONE);
             imgView_decrease.setVisibility(View.GONE);
             imgView_increase.setVisibility(View.GONE);
-            imgView_add_to_cart.setVisibility(View.GONE);
             btn_checkout.setVisibility(View.GONE);
             tv_food_quantity.setVisibility(View.GONE);
 
             tv_food_availability.setVisibility(View.VISIBLE);
+            imgView_add_to_cart.setVisibility(View.VISIBLE);
+            imgView_add_to_cart.setImageResource(R.drawable.ic_setting);
+
             if(arrayList.get(position).getStatus().equals("Available"))
             {
-                tv_food_availability.setText("Hide");
+                tv_food_availability.setText("Hide this food");
+                tv_food_availability.setTextColor(Color.parseColor("#FF0000"));
             }
             else
             {
-                tv_food_availability.setText("Show");
+                tv_food_availability.setText("Show this food");
+                tv_food_availability.setTextColor(Color.parseColor("#00FF00"));
             }
             if(position < arrayList.size() - 1)
             {
@@ -265,14 +282,59 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                                 Map<String, Object> updateAvailability = new HashMap<>();
                                 updateAvailability.put("Status", "Not Available");
                                 restaurantReference.update(updateAvailability);
-                                tv_food_availability.setText("Show");
+                                tv_food_availability.setText("Show this food");
+                                tv_food_availability.setTextColor(Color.parseColor("#00FF00"));
+
+                                CollectionReference cartListReference = fStore.collection("carts");
+                                cartListReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.isSuccessful())
+                                        {
+
+                                            for (DocumentSnapshot documentSnapshot : task.getResult())
+                                            {
+                                                ArrayList<Food> foodList = new ArrayList<>();
+                                                ArrayList<Map<String, Object>> foodsInCart = (ArrayList<Map<String, Object>>) documentSnapshot.get("Cart");
+                                                for (int i=0;i<foodsInCart.size();i++)
+                                                {
+                                                    String name = foodsInCart.get(i).get("name").toString();
+                                                    String description = foodsInCart.get(i).get("description").toString();
+                                                    String imagePath = foodsInCart.get(i).get("imagePath").toString();
+                                                    ArrayList<String> intolerance = (ArrayList)foodsInCart.get(i).get("intolerance");
+                                                    String restaurantName = foodsInCart.get(i).get("restaurantName").toString();
+                                                    String status = foodsInCart.get(i).get("status").toString();
+                                                    double price = Double.valueOf(foodsInCart.get(i).get("price").toString());
+                                                    int quantity = Integer.valueOf(foodsInCart.get(i).get("quantity").toString());
+                                                    Food food = new Food(name,description,price,quantity,intolerance,imagePath,restaurantName,status);
+
+                                                    if(!name.equals(arrayList.get(position).getName()))
+                                                    {
+                                                        foodList.add(food);
+                                                    }
+                                                }
+
+                                                DocumentReference documentReference = fStore.collection("carts").document(documentSnapshot.getId());
+                                                documentReference.update("Cart",foodList);
+                                                if(foodList.isEmpty())
+                                                {
+                                                    documentReference.delete();
+                                                }
+
+                                            }
+
+                                        }
+                                    }
+                                });
                             }
                             if(availability.equals("Not Available"))
                             {
                                 Map<String, Object> updateAvailability = new HashMap<>();
                                 updateAvailability.put("Status", "Available");
                                 restaurantReference.update(updateAvailability);
-                                tv_food_availability.setText("Hide");
+                                tv_food_availability.setText("Hide this food");
+                                tv_food_availability.setTextColor(Color.parseColor("#FF0000"));
+
                             }
                         }
                     }
@@ -503,7 +565,7 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                             }).show();
                 }
 
-                if(fragment.equals("Admin"))
+                if(fragment.equals("Admin") || fragment.equals("Restaurant Owner"))
                 {
                     AlertDialog alertDialog = new AlertDialog.Builder(context)
                             .setTitle("About this food...")
