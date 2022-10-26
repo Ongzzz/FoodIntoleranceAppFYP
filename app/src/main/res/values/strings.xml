@@ -108,7 +108,7 @@
     <string name="cart_summary">Cart Summary</string>
     <string name="approved_appointment">Approved Appointment</string>
     <string name="pending_appointment">Pending Appointment</string>
-    <string name="completed_appointment">Completed Appointment</string>
+    <string name="completed_consultation">Completed Consultation</string>
 
     <string-array name="userType_array">
         <item>Please select a user type</item>

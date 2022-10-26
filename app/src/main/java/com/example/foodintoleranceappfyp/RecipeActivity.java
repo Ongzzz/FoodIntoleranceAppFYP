@@ -398,7 +398,9 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
             }
             else
             {
+                imgView_playVideo.setVisibility(View.GONE);
                 yt_player.setVisibility(View.GONE);
+                vv_player.setVisibility(View.GONE);
             }
 
             tv_recipe_name.setText(recipe.getRecipeName());
@@ -595,7 +597,10 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     protected void onResume() {
         super.onResume();
-        yt_player.initialize("AIzaSyBjD51FgPv2XOAxWphOEEZYzx-sYOBK7Q0", this);
+        if(!recipe.getRecipeURL().isEmpty())
+        {
+            yt_player.initialize("AIzaSyBjD51FgPv2XOAxWphOEEZYzx-sYOBK7Q0", this);
+        }
 
     }
 

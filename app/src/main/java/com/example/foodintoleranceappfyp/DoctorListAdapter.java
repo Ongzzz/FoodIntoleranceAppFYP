@@ -24,12 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
@@ -59,6 +62,7 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
     private String fragmentName;
 
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+    FirebaseStorage fStorage = FirebaseStorage.getInstance();
 
     public DoctorListAdapter(ArrayList<Doctor> arrayList, Context context, String fragmentName) {
         this.arrayList = arrayList;
@@ -229,12 +233,31 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
                             public void onClick(DialogInterface dialog, int which) {
 
                                 DocumentReference removePendingDoctor = fStore.collection("pendingDoctors").document(arrayList.get(position).getEmail());
-                                removePendingDoctor.delete();
+                                removePendingDoctor.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful())
+                                        {
+                                            StorageReference storageReference = fStorage.getReference("documents/doctors/"+arrayList.get(position).getEmail());
+                                            storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                                                @Override
+                                                public void onSuccess(ListResult listResult) {
+                                                    for (StorageReference singleFileReference : listResult.getItems())
+                                                    {
+                                                        singleFileReference.delete();
+                                                    }
+                                                    Toast.makeText(context, arrayList.get(position).getName() + " is rejected", Toast.LENGTH_SHORT).show();
 
-                                Toast.makeText(context, arrayList.get(position).getName() + " is rejected", Toast.LENGTH_SHORT).show();
+                                                    arrayList.remove(position);
+                                                    notifyDataSetChanged();
+                                                }
+                                            });
 
-                                arrayList.remove(position);
-                                notifyDataSetChanged();
+
+                                        }
+                                    }
+                                });
+
 
                             }
                         }).show();

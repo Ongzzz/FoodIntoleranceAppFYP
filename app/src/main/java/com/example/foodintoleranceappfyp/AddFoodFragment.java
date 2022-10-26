@@ -202,7 +202,7 @@ public class AddFoodFragment extends Fragment {
 
                                     ProgressDialog progressDialog
                                             = new ProgressDialog(getContext());
-                                    progressDialog.setTitle("Adding your new food...");
+                                    progressDialog.setMessage("Adding your new food...");
                                     progressDialog.show();
 
                                     if(cb_fructose.isChecked())
@@ -254,13 +254,6 @@ public class AddFoodFragment extends Fragment {
                                                 progressDialog.dismiss();
                                             }
                                             Toast.makeText(getContext(),"Some error occurs... Please try again.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-
-                                            double progress = (100 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                                            progressDialog.setMessage((int)progress + "%");
                                         }
                                     });
                                 }

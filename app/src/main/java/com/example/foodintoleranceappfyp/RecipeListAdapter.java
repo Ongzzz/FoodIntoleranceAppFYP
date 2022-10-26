@@ -117,7 +117,7 @@ public class RecipeListAdapter extends BaseAdapter implements android.widget.Lis
             public void onClick(View v) {
                 AlertDialog alertDialog = new AlertDialog.Builder(context)
                         .setTitle("About this recipe...")
-                        .setMessage("Delete this recipe?")
+                        .setMessage("Delete "+ arrayList.get(position).getRecipeName()+"?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

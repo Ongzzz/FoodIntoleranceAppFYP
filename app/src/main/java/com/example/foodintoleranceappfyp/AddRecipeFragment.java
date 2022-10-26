@@ -135,7 +135,6 @@ public class AddRecipeFragment extends Fragment {
                         {
                             if(recipeURL.matches(pattern)) //if is youtube url
                             {
-                                Toast.makeText(getContext(),"here",Toast.LENGTH_SHORT).show();
                                 if(recipeURL.contains("youtube.com/watch?v=") || recipeURL.contains("m.youtube.com/watch?v="))
                                 {
 

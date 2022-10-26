@@ -123,7 +123,7 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
         else
         {
             String intolerance = TextUtils.join(", ", arrayList.get(position).getIntolerance());
-            tv_food_intolerance.setText(intolerance);
+            tv_food_intolerance.setText("Contain: "+intolerance);
         }
         tv_food_description.setText(arrayList.get(position).getDescription());
         //tv_food_price.setText("RM"+String.valueOf(arrayList.get(position).getPrice()));
@@ -569,7 +569,7 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                 {
                     AlertDialog alertDialog = new AlertDialog.Builder(context)
                             .setTitle("About this food...")
-                            .setMessage("Delete this food?")
+                            .setMessage("Delete "+ arrayList.get(position).getName()+"?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -582,40 +582,84 @@ public class FoodListAdapter extends BaseAdapter implements android.widget.ListA
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful())
                                             {
-                                                CollectionReference restaurantListReference = fStore.collection("restaurants");
-                                                restaurantListReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                                                CollectionReference cartListReference = fStore.collection("carts");
+                                                cartListReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                         if(task.isSuccessful())
                                                         {
-                                                            for(DocumentSnapshot ds : task.getResult())
+
+                                                            for (DocumentSnapshot documentSnapshot : task.getResult())
                                                             {
-                                                                if(ds.getString("Restaurant Name").equals(arrayList.get(position).getRestaurantName()))
+                                                                ArrayList<Food> foodList = new ArrayList<>();
+                                                                ArrayList<Map<String, Object>> foodsInCart = (ArrayList<Map<String, Object>>) documentSnapshot.get("Cart");
+                                                                for (int i=0;i<foodsInCart.size();i++)
                                                                 {
-                                                                    ArrayList<String> menu = (ArrayList)ds.get("Menu");
-                                                                    menu.remove(arrayList.get(position).getName());
-                                                                    Map<String, Object> updatedMenu = new HashMap<>();
-                                                                    updatedMenu.put("Menu",menu);
-                                                                    DocumentReference restaurantReference = fStore.collection("restaurants").document(ds.getId());
-                                                                    restaurantReference.update(updatedMenu).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                                            if(task.isSuccessful())
+                                                                    String name = foodsInCart.get(i).get("name").toString();
+                                                                    String description = foodsInCart.get(i).get("description").toString();
+                                                                    String imagePath = foodsInCart.get(i).get("imagePath").toString();
+                                                                    ArrayList<String> intolerance = (ArrayList)foodsInCart.get(i).get("intolerance");
+                                                                    String restaurantName = foodsInCart.get(i).get("restaurantName").toString();
+                                                                    String status = foodsInCart.get(i).get("status").toString();
+                                                                    double price = Double.valueOf(foodsInCart.get(i).get("price").toString());
+                                                                    int quantity = Integer.valueOf(foodsInCart.get(i).get("quantity").toString());
+                                                                    Food food = new Food(name,description,price,quantity,intolerance,imagePath,restaurantName,status);
+
+                                                                    if(!name.equals(arrayList.get(position).getName()))
+                                                                    {
+                                                                        foodList.add(food);
+                                                                    }
+                                                                }
+
+                                                                DocumentReference documentReference = fStore.collection("carts").document(documentSnapshot.getId());
+                                                                documentReference.update("Cart",foodList);
+                                                                if(foodList.isEmpty())
+                                                                {
+                                                                    documentReference.delete();
+                                                                }
+
+                                                            }
+
+                                                            CollectionReference restaurantListReference = fStore.collection("restaurants");
+                                                            restaurantListReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if(task.isSuccessful())
+                                                                    {
+                                                                        for(DocumentSnapshot ds : task.getResult())
+                                                                        {
+                                                                            if(ds.getString("Restaurant Name").equals(arrayList.get(position).getRestaurantName()))
                                                                             {
-                                                                                StorageReference storageReference = FirebaseStorage.getInstance().getReference(arrayList.get(position).getImagePath());
-                                                                                storageReference.delete();
-                                                                                arrayList.remove(position);
-                                                                                notifyDataSetChanged();
+                                                                                ArrayList<String> menu = (ArrayList)ds.get("Menu");
+                                                                                menu.remove(arrayList.get(position).getName());
+                                                                                Map<String, Object> updatedMenu = new HashMap<>();
+                                                                                updatedMenu.put("Menu",menu);
+                                                                                DocumentReference restaurantReference = fStore.collection("restaurants").document(ds.getId());
+                                                                                restaurantReference.update(updatedMenu).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                                        if(task.isSuccessful())
+                                                                                        {
+                                                                                            StorageReference storageReference = FirebaseStorage.getInstance().getReference(arrayList.get(position).getImagePath());
+                                                                                            storageReference.delete();
+                                                                                            arrayList.remove(position);
+                                                                                            notifyDataSetChanged();
+                                                                                        }
+                                                                                    }
+                                                                                });
+                                                                                break;
+
                                                                             }
                                                                         }
-                                                                    });
-                                                                    break;
-
+                                                                    }
                                                                 }
-                                                            }
+                                                            });
+
                                                         }
                                                     }
                                                 });
+
 
                                             }
                                         }
