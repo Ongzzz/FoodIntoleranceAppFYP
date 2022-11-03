@@ -373,26 +373,6 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
                     imgView_playVideo.setVisibility(View.GONE);
                     yt_player.setVisibility(View.VISIBLE);
                     vv_player.setVisibility(View.INVISIBLE);
-
-//                    YouTubePlayer.OnInitializedListener listener = new YouTubePlayer.OnInitializedListener() {
-//                        @Override
-//                        public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-//                            if(!b)
-//                            {
-//                                String youtubeVideoID = recipe.getRecipeURL().substring(recipe.getRecipeURL().length()-11);
-//                                youTubePlayer.cueVideo(youtubeVideoID);
-//                            }
-//
-//                        }
-//
-//                        @Override
-//                        public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-//                            Toast.makeText(RecipeActivity.this, "YouTube video failed to load", Toast.LENGTH_SHORT).show();
-//                        }
-//                    };
-//
-//                    yt_player.initialize("AIzaSyBjD51FgPv2XOAxWphOEEZYzx-sYOBK7Q0", listener);
-
                 }
 
             }
@@ -428,7 +408,6 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
                 tv_recipe_URL.setVisibility(View.GONE);
                 btn_select_recipe_new_image.setVisibility(View.GONE);
                 btn_update_recipe_new_image.setVisibility(View.GONE);
-                //imgView_changeRecipeName.setVisibility(View.GONE);
                 imgView_changeRecipeDescription.setVisibility(View.GONE);
                 imgView_changeRecipeIntolerance.setVisibility(View.GONE);
                 imgView_changeRecipeURL.setVisibility(View.GONE);
@@ -438,7 +417,6 @@ public class RecipeActivity extends YouTubeBaseActivity implements YouTubePlayer
                 tv_recipe_URL.setVisibility(View.VISIBLE);
                 btn_select_recipe_new_image.setVisibility(View.VISIBLE);
                 btn_update_recipe_new_image.setVisibility(View.VISIBLE);
-                //imgView_changeRecipeName.setVisibility(View.VISIBLE);
                 imgView_changeRecipeDescription.setVisibility(View.VISIBLE);
                 imgView_changeRecipeIntolerance.setVisibility(View.VISIBLE);
                 imgView_changeRecipeURL.setVisibility(View.VISIBLE);

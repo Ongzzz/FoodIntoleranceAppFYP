@@ -113,12 +113,6 @@ public class AddRecipeFragment extends Fragment {
                         valid = false;
                     }
 
-//                    if(recipeURL.isEmpty())
-//                    {
-//                        et_recipe_video_url.setError("Please enter the URL of this recipe");
-//                        valid = false;
-//                    }
-
                     if(!recipeURL.isEmpty())
                     {
                         boolean isValidURL = true;

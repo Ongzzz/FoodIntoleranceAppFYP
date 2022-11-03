@@ -33,7 +33,6 @@ public class FoodFragment extends Fragment {
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
     DocumentReference userReference = fStore.collection("users").document(userId);
     CollectionReference foodReference = fStore.collection("foods");
-    //ArrayList<String> menu = new ArrayList<>();
     ArrayList<Food> foodList = new ArrayList<>();
     String foodName, foodDescription, foodImagePath, userType, status;
     ArrayList<String> intolerance = new ArrayList<>();
@@ -85,7 +84,6 @@ public class FoodFragment extends Fragment {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful())
                                 {
-
                                     if(!userType.equals("Patient"))
                                     {
                                         for (DocumentSnapshot documentSnapshot : task.getResult())
@@ -193,7 +191,6 @@ public class FoodFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Restaurant", restaurant);
 
-                    //MainActivity activity = (MainActivity) context;
                     AddFoodFragment fragment = new AddFoodFragment();
                     fragment.setArguments(bundle);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();

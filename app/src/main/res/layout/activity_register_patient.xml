@@ -195,7 +195,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:ems="10"
-        android:spinnerMode="dialog"/>
+        android:spinnerMode="dialog"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/btn_registerPatient"

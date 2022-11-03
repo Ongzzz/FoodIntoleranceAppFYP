@@ -80,7 +80,6 @@ public class CompletedOrderFragment extends Fragment {
                                 String orderStatus = ds.getString("Status");
                                 String patientName = ds.getString("Patient Name");
                                 String patientEmail = ds.getString("Patient Email");
-                                //Order order = new Order(foodList, orderDateTime, patientName, restaurant, orderStatus);
                                 orderList.add(new Order(foodList, orderDateTime, completedDateTime, patientName, patientEmail, restaurantName, orderStatus));
 
                             }

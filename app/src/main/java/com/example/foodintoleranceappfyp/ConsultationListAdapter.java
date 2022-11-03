@@ -95,21 +95,10 @@ public class ConsultationListAdapter extends BaseAdapter implements android.widg
         {
             imgView_consultPatient.setVisibility(View.VISIBLE);
 
-            String intolerance = TextUtils.join(", ", arrayList.get(position).getIntolerance());
-
-//            String consultationInfo = "Appointment Time: &nbsp; &nbsp; <b>" + arrayList.get(position).getDateTime() +
-//                    "<br></b>Patient Name: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientName() +
-//                    "<br></b>Patient Email: &nbsp; &nbsp; <b>" + arrayList.get(position).getPatientEmail() +
-//                    "<br></b>Gender: &nbsp; &nbsp; <b>" + arrayList.get(position).getGender() +
-//                    "<br></b>State: &nbsp; &nbsp; <b>" + arrayList.get(position).getState() +
-//                    "<br></b>Intolerance: &nbsp; &nbsp; <b>" + intolerance;
-
             String consultationInfo = String.format("%-14s : %s", "Appointment Time", arrayList.get(position).getDateTime())
                     + System.getProperty("line.separator") + String.format("%-21s : %s", "Patient Name", arrayList.get(position).getPatientName())
-                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Patient Email", arrayList.get(position).getPatientEmail())
-                    + System.getProperty("line.separator") + String.format("%-27s : %s", "Gender", arrayList.get(position).getGender())
-                    + System.getProperty("line.separator") + String.format("%-30s : %s", "State", arrayList.get(position).getState())
-                    + System.getProperty("line.separator") + String.format("%-25s : %s", "Intolerance", intolerance);
+                    + System.getProperty("line.separator") + String.format("%-23s : %s", "Patient Email", arrayList.get(position).getPatientEmail());
+
 
             tv_consultationInfo.setText(consultationInfo);
 
@@ -156,14 +145,10 @@ public class ConsultationListAdapter extends BaseAdapter implements android.widg
                                                 if (documentSnapshot != null)
                                                 {
                                                     doctorName = documentSnapshot.getString("Name");
-//                                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.ddHH:mm:ss");
-//                                                //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-//                                                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
                                                     String dateTime = arrayList.get(position).getDateTime();
                                                     String urlDateTime = dateTime.replaceAll("\\s","")
                                                             .replace(".","").replace(":","")
                                                             +patientEmail+doctorId;
-                                                    //dateTime = dateTime.replaceAll("\\s","");
 
                                                     JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
                                                             .setRoom(urlDateTime+patientEmail+doctorId)

@@ -49,18 +49,9 @@ public class RegisterRestaurantOwner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_restaurant_owner);
 
-//        Spinner spinner_state = findViewById(R.id.spinner_restaurantState);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//                R.layout.spinner_item,
-//                getResources().getStringArray(R.array.restaurantState_array));
-//
-//        spinner_state.setAdapter(adapter);
-
         EditText et_restaurantOwnerName = findViewById(R.id.et_restaurantOwnerName);
         EditText et_restaurantOwnerEmail = findViewById(R.id.et_restaurantOwnerEmail);
         EditText et_restaurantOwnerPassword = findViewById(R.id.et_restaurantOwnerPassword);
-//        EditText et_restaurantName = findViewById(R.id.et_restaurantName);
-//        EditText et_restaurantAddress = findViewById(R.id.et_restaurantAddress);
         Button btn_registerRestaurantOwner = findViewById(R.id.btn_registerRestaurantOwner);
         ImageView img_showHide = findViewById(R.id.img_showHide);
 
@@ -85,9 +76,6 @@ public class RegisterRestaurantOwner extends AppCompatActivity {
                 String name = et_restaurantOwnerName.getText().toString().trim();
                 String email = et_restaurantOwnerEmail.getText().toString().trim();
                 String password = et_restaurantOwnerPassword.getText().toString().trim();
-//                String restaurantName = et_restaurantName.getText().toString().trim();
-//                String restaurantAddress = et_restaurantAddress.getText().toString().trim();
-//                String restaurantState = spinner_state.getSelectedItem().toString();
 
                 boolean emailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches();
 
@@ -128,25 +116,6 @@ public class RegisterRestaurantOwner extends AppCompatActivity {
 
                 }
 
-//                if(restaurantName.isEmpty())
-//                {
-//                    et_restaurantName.setError("Please fill in your restaurant name!");
-//                    valid = false;
-//                }
-//
-//                if(restaurantAddress.isEmpty())
-//                {
-//                    et_restaurantAddress.setError("Please fill in your restaurant address!");
-//                    valid = false;
-//                }
-//
-//                if(restaurantState.equals(getResources().getStringArray(R.array.restaurantState_array)[0]))
-//                {
-//                    Toast.makeText(getApplicationContext(), "Please select a state", Toast.LENGTH_SHORT).show();
-//                    valid = false;
-//                }
-
-
                 if(valid)
                 {
 
@@ -158,15 +127,11 @@ public class RegisterRestaurantOwner extends AppCompatActivity {
                             {
                                 ArrayList<String> restaurantList = new ArrayList<>();
                                 String userId = email;
-                                //String restaurantId = userId + restaurantName;
                                 DocumentReference documentReference = fStore.collection("restaurantOwners").document(userId);
                                 Map<String,Object> user = new HashMap<>();
                                 user.put("Name",name);
                                 user.put("Email",email);
-                                //user.put("Restaurant ID", restaurantId);
-                                //restaurantList.add(restaurantName);
                                 user.put("Restaurant Name",restaurantList);
-                                //user.put("UserType","Restaurant Owner");
                                 documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -184,26 +149,8 @@ public class RegisterRestaurantOwner extends AppCompatActivity {
 
                                     }
                                 });
-//                                ArrayList<Food> restaurantMenu = new ArrayList<>();
-//                                DocumentReference restaurantReference = fStore.collection("restaurants").document(restaurantId);
-//                                Map<String,Object> restaurant = new HashMap<>();
-//                                //restaurant.put("Restaurant Owner:", name);
-//                                restaurant.put("Restaurant Owner Email", email);
-//                                restaurant.put("Restaurant Name",restaurantName);
-//                                restaurant.put("Restaurant Address",restaurantAddress);
-//                                restaurant.put("Restaurant State",restaurantState);
-//                                restaurant.put("Restaurant Logo", "");
-//                                restaurant.put("Menu", restaurantMenu);
-//                                restaurantReference.set(restaurant).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                    }
-//                                });
 
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putString("userType","Restaurant Owner");
-//                                i.putExtras(bundle);
                                 startActivity(i);
                             }
                             else

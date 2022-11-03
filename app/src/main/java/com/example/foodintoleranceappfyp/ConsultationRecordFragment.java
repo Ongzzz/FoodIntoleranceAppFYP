@@ -64,38 +64,41 @@ public class ConsultationRecordFragment extends Fragment{
                                 {
                                     if(userType.equals("Admin"))
                                     {
-                                        patientEmail = ds.getString("Patient Email");
                                         patientName = ds.getString("Patient Name");
-                                        doctorEmail = ds.getString("Doctor Email");
+                                        patientEmail = ds.getString("Patient Email");
                                         doctorName = ds.getString("Doctor Name");
+                                        doctorEmail = ds.getString("Doctor Email");
                                         dateTime = ds.getString("DateTime");
-                                        consultations.add(new Consultation(dateTime,patientName,patientEmail,
-                                                null,null, null, doctorName, doctorEmail));
+
+                                        consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, doctorEmail));
+
                                     }
                                     if(userType.equals("Doctor"))
                                     {
                                         if(ds.getString("Doctor Email").equals(userId))
                                         {
-                                            patientEmail = ds.getString("Patient Email");
                                             patientName = ds.getString("Patient Name");
-                                            doctorEmail = ds.getString("Doctor Email");
+                                            patientEmail = ds.getString("Patient Email");
                                             doctorName = ds.getString("Doctor Name");
+                                            doctorEmail = ds.getString("Doctor Email");
                                             dateTime = ds.getString("DateTime");
-                                            consultations.add(new Consultation(dateTime,patientName,patientEmail,
-                                                    null,null, null, doctorName, doctorEmail));
+
+                                            consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, doctorEmail));
+
                                         }
                                     }
                                     if(userType.equals("Patient"))
                                     {
                                         if(ds.getString("Patient Email").equals(userId))
                                         {
-                                            patientEmail = ds.getString("Patient Email");
                                             patientName = ds.getString("Patient Name");
-                                            doctorEmail = ds.getString("Doctor Email");
+                                            patientEmail = ds.getString("Patient Email");
                                             doctorName = ds.getString("Doctor Name");
+                                            doctorEmail = ds.getString("Doctor Email");
                                             dateTime = ds.getString("DateTime");
-                                            consultations.add(new Consultation(dateTime,patientName,patientEmail,
-                                                    null,null, null, doctorName, doctorEmail));
+
+                                            consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, doctorEmail));
+
                                         }
                                     }
                                 }
@@ -142,38 +145,41 @@ public class ConsultationRecordFragment extends Fragment{
                                         {
                                             if(userType.equals("Admin"))
                                             {
-                                                patientEmail = ds.getString("Patient Email");
                                                 patientName = ds.getString("Patient Name");
-                                                doctorEmail = ds.getString("Doctor Email");
+                                                patientEmail = ds.getString("Patient Email");
                                                 doctorName = ds.getString("Doctor Name");
+                                                doctorEmail = ds.getString("Doctor Email");
                                                 dateTime = ds.getString("DateTime");
-                                                consultations.add(new Consultation(dateTime,patientName,patientEmail,
-                                                        null,null, null, doctorName, doctorEmail));
+
+                                                consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, doctorEmail));
+
                                             }
                                             if(userType.equals("Doctor"))
                                             {
                                                 if(ds.getString("Doctor Email").equals(userId))
                                                 {
-                                                    patientEmail = ds.getString("Patient Email");
                                                     patientName = ds.getString("Patient Name");
-                                                    doctorEmail = ds.getString("Doctor Email");
+                                                    patientEmail = ds.getString("Patient Email");
                                                     doctorName = ds.getString("Doctor Name");
+                                                    doctorEmail = ds.getString("Doctor Email");
                                                     dateTime = ds.getString("DateTime");
-                                                    consultations.add(new Consultation(dateTime,patientName,patientEmail,
-                                                            null,null, null, doctorName, doctorEmail));
+
+                                                    consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, doctorEmail));
+
                                                 }
                                             }
                                             if(userType.equals("Patient"))
                                             {
                                                 if(ds.getString("Patient Email").equals(userId))
                                                 {
-                                                    patientEmail = ds.getString("Patient Email");
                                                     patientName = ds.getString("Patient Name");
-                                                    doctorEmail = ds.getString("Doctor Email");
+                                                    patientEmail = ds.getString("Patient Email");
                                                     doctorName = ds.getString("Doctor Name");
+                                                    doctorEmail = ds.getString("Doctor Email");
                                                     dateTime = ds.getString("DateTime");
-                                                    consultations.add(new Consultation(dateTime,patientName,patientEmail,
-                                                            null,null, null, doctorName, doctorEmail));
+
+                                                    consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, doctorEmail));
+
                                                 }
                                             }
                                         }

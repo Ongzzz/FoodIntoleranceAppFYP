@@ -42,8 +42,6 @@ public class LoginFragment extends Fragment {
 
     FirebaseAuth fAuth = FirebaseAuth.getInstance();
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-    CollectionReference collectionReference_pendingDoctors = fStore.collection("pendingDoctors");
-    //String userId = fAuth.getCurrentUser().getUid();
     int count = 0;
 
     @Nullable
@@ -63,7 +61,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 count++;
-                //Toast.makeText(getActivity(),String.valueOf(count),Toast.LENGTH_SHORT).show();
                 if(count>=7)
                 {
                     btn_login.setText("Register Admin");
@@ -148,7 +145,6 @@ public class LoginFragment extends Fragment {
                                     DocumentReference documentReference = fStore.collection("admins").document(userId);
                                     Map<String,Object> user = new HashMap<>();
                                     user.put("Email",email);
-                                    //user.put("UserType","Admin");
                                     documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -166,9 +162,6 @@ public class LoginFragment extends Fragment {
                                     });
 
                                     Intent i = new Intent(getActivity(), MainActivity.class);
-//                                    Bundle bundle = new Bundle();
-//                                    bundle.putString("userType","Admin");
-//                                    i.putExtras(bundle);
                                     startActivity(i);
                                 }
                                 else

@@ -32,9 +32,6 @@ public class RegisterFragment extends Fragment {
         spinner_userType.setAdapter(adapter);
 
         Button btn_selectUserType = view.findViewById(R.id.btn_selectUserType);
-        TextView tv_patientExplanation = view.findViewById(R.id.tv_patientExplanation);
-        TextView tv_doctorExplanation = view.findViewById(R.id.tv_doctorExplanation);
-        TextView tv_restaurantOwnerExplanation = view.findViewById(R.id.tv_restaurantOwnerExplanation);
 
         btn_selectUserType.setOnClickListener(new View.OnClickListener() {
             @Override

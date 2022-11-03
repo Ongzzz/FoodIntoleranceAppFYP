@@ -91,47 +91,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     for(DocumentSnapshot documentSnapshot : task.getResult())
                     {
-                        boolean sameDay = false;
-                        boolean past = false;
-                        if(documentSnapshot.getLong("Year").intValue() == currentYear ||
-                                documentSnapshot.getLong("Month").intValue() == currentMonth ||
-                                documentSnapshot.getLong("Day").intValue() == currentDay)
+
+                        boolean past;
+                        if((documentSnapshot.getLong("Year").intValue() < currentYear) ||
+                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
+                                        documentSnapshot.getLong("Month").intValue() < currentMonth) ||
+                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
+                                        documentSnapshot.getLong("Month").intValue() == currentMonth &&
+                                        documentSnapshot.getLong("Day").intValue() == currentDay &&
+                                        documentSnapshot.getLong("Hour").intValue() < currentHour) ||
+                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
+                                        documentSnapshot.getLong("Month").intValue() == currentMonth &&
+                                        documentSnapshot.getLong("Day").intValue() == currentDay &&
+                                        documentSnapshot.getLong("Hour").intValue() == currentHour &&
+                                        documentSnapshot.getLong("Minute").intValue()+15 <= currentMinute))
                         {
-                            sameDay = true;
+                            past = true;
                         }
                         else
                         {
-                            sameDay = false;
-                        }
-
-                        if(!sameDay)
-                        {
-//                            if(documentSnapshot.getLong("Year").intValue() < currentYear &&
-//                                    documentSnapshot.getLong("Month").intValue() < currentMonth &&
-//                                    documentSnapshot.getLong("Day").intValue() < currentDay)
-//                            {
-//                                past = true;
-//                            }
-                            if((documentSnapshot.getLong("Year").intValue() < currentYear) ||
-                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
-                                documentSnapshot.getLong("Month").intValue() < currentMonth) ||
-                                (documentSnapshot.getLong("Year").intValue() == currentYear &&
-                                documentSnapshot.getLong("Month").intValue() == currentMonth &&
-                                documentSnapshot.getLong("Day").intValue() < currentDay))
-                            {
-                                past = true;
-                            }
-                            else
-                            {
-                                past = false;
-                            }
+                            past = false;
                         }
 
 
                         if(!documentSnapshot.getString("Status").equals("Consulted"))
                         {
-                            if((past) || (sameDay && (documentSnapshot.getLong("Hour").intValue() == currentHour
-                                    && documentSnapshot.getLong("Minute").intValue() > currentMinute+15)))
+                            if(past)
                             {
                                 Map<String, Object> expired = new HashMap<>();
                                 expired.put("Status","Expired");

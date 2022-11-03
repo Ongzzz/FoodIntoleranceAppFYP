@@ -115,7 +115,6 @@ public class AppointmentListAdapter extends BaseAdapter implements android.widge
         }
 
         DocumentReference appointmentReference = fStore.collection("appointments").document(dateTime+patientEmail+doctorEmail);
-        //DocumentReference consultationReference = fStore.collection("consultations").document(dateTime+patientEmail+doctorEmail);
 
         imgView_manageAppointment.setOnClickListener(new View.OnClickListener() {
             @Override

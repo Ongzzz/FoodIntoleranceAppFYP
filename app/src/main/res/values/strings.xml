@@ -13,19 +13,7 @@
     <string name="welcomeNewUser">Join us by creating an account</string>
     <string name="userType">Type of user?</string>
     <string name="selectUserType">Continue</string>
-    <string name="PatientExplanation">"Gluten/Lactose/Fructose Intolerant Patient can:
 
-1.Order food for self pickup
-2.Online consultation with doctor
-3.Receive helpful advice from AI doctor and more!"</string>
-
-    <string name="DoctorExplanation">"Doctor can:
-
-1.Online consultation with patient"</string>
-
-    <string name="restaurantOwnerExplanation">"Restaurant owner can:
-
-1.Add new food in the menu of your restaurant"</string>
     <string name="gender">Gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>

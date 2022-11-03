@@ -173,8 +173,6 @@ public class MakeAppointmentFragment extends Fragment {
                                     }
                                 }
 
-                                //Toast.makeText(getContext(),"day:"+ day+" currentDay:"+ currentDay, Toast.LENGTH_SHORT).show();
-                                //Toast.makeText(getContext(),"minute:"+ minute+" currentMinute:"+ currentMinute, Toast.LENGTH_SHORT).show();
                                 appointmentReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -194,8 +192,7 @@ public class MakeAppointmentFragment extends Fragment {
                                                                     || (hour > documentSnapshot.getLong("Hour").intValue()  &&
                                                                     hour - documentSnapshot.getLong("Hour").intValue() == 1))
                                                             {
-                                                                //Toast.makeText(getContext(),"same hour", Toast.LENGTH_SHORT).show();
-                                                                //Toast.makeText(getContext(),"minute:"+ minute + "doctor minute:" + documentSnapshot.getLong("Minute").intValue(), Toast.LENGTH_SHORT).show();
+
                                                                 if((minute  > documentSnapshot.getLong("Minute").intValue()
                                                                         && documentSnapshot.getLong("Minute").intValue()+60 - minute <= 30)
                                                                         || (documentSnapshot.getLong("Minute").intValue() > minute

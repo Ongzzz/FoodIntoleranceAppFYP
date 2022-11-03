@@ -43,8 +43,6 @@ public class RegisterPatient extends AppCompatActivity {
 
     FirebaseAuth fAuth = FirebaseAuth.getInstance();
     FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-//    String userId = fAuth.getCurrentUser().getUid();
-    //CollectionReference collectionReference_pendingDoctors = fStore.collection("pendingDoctors");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,31 +168,30 @@ public class RegisterPatient extends AppCompatActivity {
 
                     fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task2) {
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            if(task2.isSuccessful())
+                            if(task.isSuccessful())
                             {
                                 String userId = email;
                                 DocumentReference documentReference = fStore.collection("patients").document(userId);
-                                Map<String,Object> user = new HashMap<>();
-                                user.put("Name",name);
-                                user.put("Email",email);
-                                user.put("Gender",gender);
-                                user.put("Intolerance",intolerance);
-                                user.put("State",state);
-                                //user.put("UserType","Patient");
-                                documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                Map<String,Object> patient = new HashMap<>();
+                                patient.put("Name",name);
+                                patient.put("Email",email);
+                                patient.put("Gender",gender);
+                                patient.put("Intolerance",intolerance);
+                                patient.put("State",state);
+                                documentReference.set(patient).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(getApplicationContext(),"User Account is created!",Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
-                                DocumentReference documentReference2 = fStore.collection("users").document(userId);
-                                Map<String,Object> user2 = new HashMap<>();
-                                user2.put("Name",name);
-                                user2.put("UserType","Patient");
-                                documentReference2.set(user2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                DocumentReference userReference = fStore.collection("users").document(userId);
+                                Map<String,Object> user = new HashMap<>();
+                                user.put("Name",name);
+                                user.put("UserType","Patient");
+                                userReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
@@ -202,14 +199,11 @@ public class RegisterPatient extends AppCompatActivity {
                                 });
 
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putString("userType","Patient");
-//                                i.putExtras(bundle);
                                 startActivity(i);
                             }
                             else
                             {
-                                if (task2.getException() instanceof FirebaseAuthUserCollisionException) {
+                                if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                     Toast.makeText(getApplicationContext(), "The email is used by another user", Toast.LENGTH_SHORT).show();
                                 }
                             }

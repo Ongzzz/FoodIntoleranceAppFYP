@@ -37,8 +37,7 @@ public class ConsultPatientFragment extends Fragment{
     String userId = fAuth.getCurrentUser().getEmail();
     CollectionReference collectionReference = fStore.collection("appointments");
     ArrayList<Consultation> consultations = new ArrayList<>();
-    String patientName, patientEmail, patientState, patientGender, dateTime, doctorName;
-    ArrayList<String> intolerance = new ArrayList<>();
+    String patientName, patientEmail, dateTime, doctorName;
 
     @Nullable
     @Override
@@ -51,10 +50,6 @@ public class ConsultPatientFragment extends Fragment{
         TextView tv_no_consult_patient = view.findViewById(R.id.tv_no_consult_patient);
         ListView lv_consult_patient = view.findViewById(R.id.lv_consult_patient);
 
-        tv_no_consult_patient.setText("No patient...");
-        tv_no_consult_patient.setVisibility(View.VISIBLE);
-        lv_consult_patient.setVisibility(View.GONE);
-
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -66,37 +61,28 @@ public class ConsultPatientFragment extends Fragment{
                                 documentSnapshot.getString("Status").equals("Approved"))
                         {
                             doctorName = documentSnapshot.getString("Doctor Name");
+                            patientName = documentSnapshot.getString("Patient Name");
                             patientEmail = documentSnapshot.getString("Patient Email");
                             dateTime = documentSnapshot.getString("Datetime");
-                            DocumentReference documentReference = fStore.collection("patients").document(patientEmail);
-                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        DocumentSnapshot ds = task.getResult();
-                                        if(ds != null)
-                                        {
-                                            patientName = ds.getString("Name");
-                                            patientState = ds.getString("State");
-                                            patientGender = ds.getString("Gender");
-                                            intolerance = (ArrayList<String>) ds.get("Intolerance");
-                                            consultations.add(new Consultation(dateTime, patientName, patientEmail, patientGender, patientState, intolerance
-                                                    , doctorName, userId));
-                                        }
 
-                                        if(!consultations.isEmpty())
-                                        {
-                                            tv_no_consult_patient.setVisibility(View.GONE);
-                                            lv_consult_patient.setVisibility(View.VISIBLE);
-                                            lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
-                                        }
-
-                                    }
-                                }
-                            });
+                            consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, userId));
                         }
+
                     }
+
+                    if(!consultations.isEmpty())
+                    {
+                        tv_no_consult_patient.setVisibility(View.GONE);
+                        lv_consult_patient.setVisibility(View.VISIBLE);
+                        lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
+                    }
+                    else
+                    {
+                        tv_no_consult_patient.setVisibility(View.VISIBLE);
+                        tv_no_consult_patient.setText("No appointment for consultation...");
+                        lv_consult_patient.setVisibility(View.GONE);
+                    }
+
                 }
             }
         });
@@ -122,36 +108,26 @@ public class ConsultPatientFragment extends Fragment{
                                         documentSnapshot.getString("Status").equals("Approved"))
                                 {
                                     doctorName = documentSnapshot.getString("Doctor Name");
+                                    patientName = documentSnapshot.getString("Patient Name");
                                     patientEmail = documentSnapshot.getString("Patient Email");
                                     dateTime = documentSnapshot.getString("Datetime");
-                                    DocumentReference documentReference = fStore.collection("patients").document(patientEmail);
-                                    documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if(task.isSuccessful())
-                                            {
-                                                DocumentSnapshot ds = task.getResult();
-                                                if(ds != null)
-                                                {
-                                                    patientName = ds.getString("Name");
-                                                    patientState = ds.getString("State");
-                                                    patientGender = ds.getString("Gender");
-                                                    intolerance = (ArrayList<String>) ds.get("Intolerance");
-                                                    consultations.add(new Consultation(dateTime, patientName, patientEmail, patientGender, patientState, intolerance
-                                                            , doctorName, userId));
-                                                }
 
-                                                if(!consultations.isEmpty())
-                                                {
-                                                    tv_no_consult_patient.setVisibility(View.GONE);
-                                                    lv_consult_patient.setVisibility(View.VISIBLE);
-                                                    lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
-                                                }
-
-                                            }
-                                        }
-                                    });
+                                    consultations.add(new Consultation(dateTime, patientName, patientEmail,doctorName, userId));
                                 }
+
+                            }
+
+                            if(!consultations.isEmpty())
+                            {
+                                tv_no_consult_patient.setVisibility(View.GONE);
+                                lv_consult_patient.setVisibility(View.VISIBLE);
+                                lv_consult_patient.setAdapter(new ConsultationListAdapter(consultations, getContext(), "Consult Patient"));
+                            }
+                            else
+                            {
+                                tv_no_consult_patient.setVisibility(View.VISIBLE);
+                                tv_no_consult_patient.setText("No appointment for consultation...");
+                                lv_consult_patient.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -164,52 +140,6 @@ public class ConsultPatientFragment extends Fragment{
         return view;
     }
 
-//    private interface FireStoreCallback
-//    {
-//        void onCallback(ArrayList<Consultation> consultations);
-//    }
-//
-//    private void fetchData(ConsultPatientFragment.FireStoreCallback fireStoreCallback)
-//    {
-//        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful())
-//                {
-//                    for(DocumentSnapshot documentSnapshot : task.getResult())
-//                    {
-//                        if(documentSnapshot.getString("Doctor Email").equals(userId) &&
-//                            documentSnapshot.getString("Status").equals("Approved"))
-//                        {
-//                            doctorName = documentSnapshot.getString("Doctor Name");
-//                            patientEmail = documentSnapshot.getString("Patient Email");
-//                            dateTime = documentSnapshot.getString("Datetime");
-//                            DocumentReference documentReference = fStore.collection("patients").document(patientEmail);
-//                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                    if(task.isSuccessful())
-//                                    {
-//                                        DocumentSnapshot ds = task.getResult();
-//                                        if(ds != null)
-//                                        {
-//                                            patientName = ds.getString("Name");
-//                                            patientState = ds.getString("State");
-//                                            patientGender = ds.getString("Gender");
-//                                            intolerance = (ArrayList<String>) ds.get("Intolerance");
-//                                            consultations.add(new Consultation(dateTime, patientName, patientEmail, patientGender, patientState, intolerance
-//                                            , doctorName, userId));
-//                                        }
-//                                        fireStoreCallback.onCallback(consultations);
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    }
 
 }
 

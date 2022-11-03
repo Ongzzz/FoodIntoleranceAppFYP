@@ -32,7 +32,6 @@ public class MenuFragment extends Fragment {
 
         if (bundle != null)
         {
-            //Restaurant restaurant = (Restaurant) bundle.getSerializable("restaurant");
 
             FoodFragment foodFragment = new FoodFragment();
             foodFragment.setArguments(bundle);

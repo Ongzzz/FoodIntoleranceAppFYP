@@ -30,22 +30,6 @@ public class CheckoutTab extends Fragment {
     DocumentReference cartReference = fStore.collection("carts").document(userId);
     ArrayList<Food> foodList = new ArrayList<>();
 
-    private static final String YOUR_CLIENT_ID = "Ab4w_WQXYxB7tu1ktv3f12EDqDJLZquByIz_XTD48zz0RC3ys4d2j3nuNdylqZbj8epQM6OaZsRPaXZW";
-
-
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        PayPalCheckout.setConfig(new CheckoutConfig(
-//                getActivity().getApplication(),
-//                YOUR_CLIENT_ID,
-//                Environment.SANDBOX,
-//                "com.example.foodintoleranceappfyp://paypalpay",
-//                CurrencyCode.MYR,
-//                UserAction.PAY_NOW
-//        ));
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

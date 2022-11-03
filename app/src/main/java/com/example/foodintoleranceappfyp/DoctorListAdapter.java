@@ -187,6 +187,7 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
                                 doctor.put("Hospital",arrayList.get(position).getHospital());
                                 doctor.put("Approved Date", dateTime);
                                 doctor.put("Approved By", userId);
+                                doctor.put("Document Path", arrayList.get(position).getDocumentNameList());
                                 addApprovedDoctor.set(doctor);
 
                                 DocumentReference updateDoctorStatus = fStore.collection("users").document(arrayList.get(position).getEmail());
@@ -232,29 +233,64 @@ public class DoctorListAdapter extends BaseAdapter implements android.widget.Lis
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+                                String senderEmail="foodintoleranceapp53@gmail.com";
+                                String senderPassword="lkqgijyawiwshwjc";
+                                String messageToSend="Your account is rejected.";
+                                Properties props = new Properties();
+                                props.put("mail.smtp.auth","true");
+                                props.put("mail.smtp.starttls.enable","true");
+                                props.put("mail.smtp.host","smtp.gmail.com");
+                                props.put("mail.smtp.port","587");
+                                Session session = Session.getInstance(props, new javax.mail.Authenticator(){
+                                    @Override
+                                    protected PasswordAuthentication getPasswordAuthentication() {
+                                        return new PasswordAuthentication(senderEmail,senderPassword);
+                                    }
+                                });
+
+                                try {
+                                    Message message = new MimeMessage(session);
+                                    message.setFrom(new InternetAddress(senderEmail));
+                                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(arrayList.get(position).getEmail()));
+                                    message.setSubject("Food Intolerance App Doctor Account Rejected Email");
+                                    message.setText(messageToSend);
+                                    Transport.send(message);
+                                }catch (MessagingException e){
+                                    throw new RuntimeException(e);
+                                }
+
                                 DocumentReference removePendingDoctor = fStore.collection("pendingDoctors").document(arrayList.get(position).getEmail());
                                 removePendingDoctor.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful())
                                         {
-                                            StorageReference storageReference = fStorage.getReference("documents/doctors/"+arrayList.get(position).getEmail());
-                                            storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                                                @Override
-                                                public void onSuccess(ListResult listResult) {
-                                                    for (StorageReference singleFileReference : listResult.getItems())
-                                                    {
-                                                        singleFileReference.delete();
-                                                    }
-                                                    Toast.makeText(context, arrayList.get(position).getName() + " is rejected", Toast.LENGTH_SHORT).show();
 
-                                                    arrayList.remove(position);
-                                                    notifyDataSetChanged();
+                                            DocumentReference removeUser = fStore.collection("users").document(arrayList.get(position).getEmail());
+                                            removeUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful())
+                                                    {
+                                                        StorageReference storageReference = fStorage.getReference("documents/doctors/"+arrayList.get(position).getEmail());
+                                                        storageReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                                                            @Override
+                                                            public void onSuccess(ListResult listResult) {
+                                                                for (StorageReference singleFileReference : listResult.getItems())
+                                                                {
+                                                                    singleFileReference.delete();
+                                                                }
+                                                                Toast.makeText(context, arrayList.get(position).getName() + " is rejected", Toast.LENGTH_SHORT).show();
+
+                                                                arrayList.remove(position);
+                                                                notifyDataSetChanged();
+                                                            }
+                                                        });
+                                                    }
                                                 }
                                             });
-
-
                                         }
+
                                     }
                                 });
 

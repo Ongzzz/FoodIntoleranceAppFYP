@@ -383,7 +383,8 @@ public class CartListAdapter extends BaseAdapter implements android.widget.ListA
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
                 String cartID = sdf.format(new Date());
 
-                PaymentRequest request = new PaymentRequest("1.5.0", merchantID, signatureKey, "MYR", BigDecimal.valueOf(totalPrice), cartID, CartListAdapter.this);
+                PaymentRequest request = new PaymentRequest("1.5.0", merchantID, signatureKey, "MYR",
+                        BigDecimal.valueOf(totalPrice), cartID, CartListAdapter.this);
                 //set your callback url, email ,mobile number and return url
                 //return url is your app url scheme
                 request.setCallbackUrl("https://paymentdemo.gkash.my/callback.php");

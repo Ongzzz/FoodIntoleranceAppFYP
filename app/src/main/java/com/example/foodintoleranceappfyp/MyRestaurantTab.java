@@ -82,10 +82,7 @@ public class MyRestaurantTab extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_my_restaurant_tab, container, false);
 
-        //TextView tv_restaurantNameField = view.findViewById(R.id.tv_restaurantNameField);
         TextView tv_restaurantAddressField = view.findViewById(R.id.tv_restaurantAddressField);
-//        TextView tv_restaurantStateField = view.findViewById(R.id.tv_restaurantStateField);
-//        ImageView imgView_changeRestaurantAddress = view.findViewById(R.id.imgView_changeRestaurantAddress);
         Spinner spinner_myRestaurant = view.findViewById(R.id.spinner_myRestaurant);
         Button btn_addNewRestaurant = view.findViewById(R.id.btn_addNewRestaurant);
         Button btn_deleteRestaurant = view.findViewById(R.id.btn_deleteRestaurant);
@@ -93,7 +90,6 @@ public class MyRestaurantTab extends Fragment {
         Button btn_upload = view.findViewById(R.id.btn_upload);
         imgView_restaurant_logo = view.findViewById(R.id.imgView_restaurant_logo);
         ImageView imgView_arrow = view.findViewById(R.id.imgView_arrow);
-        //myRestaurants.add("Please select your restaurant");
 
         userReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -128,7 +124,6 @@ public class MyRestaurantTab extends Fragment {
                                                     , userId, restaurantMenu, logoPath));
 
                                             myRestaurants.add(restaurantName);
-                                            //Toast.makeText(getContext(),String.valueOf(myRestaurants.size()), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -159,7 +154,6 @@ public class MyRestaurantTab extends Fragment {
                                     {
                                         imgView_arrow.setVisibility(View.GONE);
                                         tv_restaurantAddressField.setText(restaurantsDetail.get(0).getRestaurantAddress());
-                                        //tv_restaurantStateField.setText(restaurantsDetail.get(0).getRestaurantState());
                                     }
                                     else //more than 1 restaurant
                                     {
@@ -192,9 +186,7 @@ public class MyRestaurantTab extends Fragment {
                                                         e.printStackTrace();
                                                     }
 
-                                                    //tv_restaurantNameField.setText(restaurantsDetail.get(position).getRestaurantName());
                                                     tv_restaurantAddressField.setText(restaurantsDetail.get(position).getRestaurantAddress());
-                                                    //tv_restaurantStateField.setText(restaurantsDetail.get(position).getRestaurantState());
                                                 }
                                             }
 
@@ -268,16 +260,6 @@ public class MyRestaurantTab extends Fragment {
                                                                     getActivity().getSupportFragmentManager().beginTransaction().
                                                                             replace(R.id.fragment_container, new MyRestaurantFragment()).commit();
 
-//                                                                    storageReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                                        @Override
-//                                                                        public void onComplete(@NonNull Task<Void> task) {
-//                                                                            if(task.isSuccessful())
-//                                                                            {
-//                                                                                getActivity().getSupportFragmentManager().beginTransaction().
-//                                                                                        replace(R.id.fragment_container, new MyRestaurantFragment()).commit();
-//                                                                            }
-//                                                                        }
-//                                                                    });
                                                                 }
                                                             }
                                                         });
@@ -306,7 +288,6 @@ public class MyRestaurantTab extends Fragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                //startActivityForResult(intent, SELECT_IMAGE_REQUEST);
                 activityResultLauncher.launch(intent);
             }
         });
@@ -384,14 +365,4 @@ public class MyRestaurantTab extends Fragment {
                 }
             });
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == SELECT_IMAGE_REQUEST && data != null && data.getData() != null)
-//        {
-//            path = data.getData();
-//            imgView_restaurant_logo.setImageURI(path);
-//        }
-//    }
 }
